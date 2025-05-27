@@ -11,8 +11,16 @@ export let CONFIGS: any = {
     key: "VERSION",
     value: 1,
   },
+  BOOK: {
+    key: "BOOK",
+    value: 1,
+  },
   CHAPTER: {
     key: "CHAPTER",
+    value: 1,
+  },
+  VERSE: {
+    key: "VERSE",
     value: 1,
   },
 };

@@ -3,6 +3,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 export interface VChapterWithVerses {
   id: number;
   bookName: string;
+  bookId: number;
   chapterNumber: number;
   verses: Verse[];
 }
@@ -22,6 +23,7 @@ interface Helper {
   verse_id: number;
   verse_number: number;
   verse_text: string;
+  book_id: number;
 }
 
 // READ
@@ -37,7 +39,8 @@ export async function GetChapterByIdAsync(
       chapters.number AS chapter_number,
       verses.id AS verse_id,
       verses.number AS verse_number,
-      verse_texts.text As verse_text
+      verse_texts.text AS verse_text,
+      chapters.book_id AS book_id
     FROM
       versions
       INNER JOIN book_translations ON versions.language_id = book_translations.language_id
@@ -54,6 +57,7 @@ export async function GetChapterByIdAsync(
   const chapter: VChapterWithVerses = {
     id: data[0].chapter_id,
     bookName: data[0].book_name,
+    bookId: data[0].book_id,
     chapterNumber: data[0].chapter_number,
     verses: [],
   };

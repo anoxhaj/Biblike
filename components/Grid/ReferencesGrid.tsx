@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { FlatList } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 
 import Item from "./ReferencesItem";
@@ -12,7 +12,9 @@ import useColorScheme from "../../hooks/useColorScheme";
 export default function ReferencesGrid() {
   const db = useSQLiteContext();
   const [books, setBooks] = useState<vbwc.VBookWithChapters[]>([]);
-  const flatListRef = useRef<FlatList<vbwc.VBookWithChapters>>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number>(-1);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const theme = useColorScheme();
 
   const fetchBooks = useCallback(() => {
     async function fetch() {
@@ -32,56 +34,37 @@ export default function ReferencesGrid() {
     fetchBooks();
   }, []);
 
-  const [expandedIndex, setExpandedIndex] = useState<number>(-1);
-
   const onExpansionHandler = (index: number) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
-
-    if (flatListRef.current && expandedIndex != index) {
-      flatListRef?.current?.scrollToIndex({
-        index,
-        animated: true,
-        viewPosition: 0,
-      });
-    }
   };
 
-  const theme = useColorScheme();
-
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: vbwc.VBookWithChapters;
-    index: number;
-  }) => (
-    <Item
-      index={index}
-      item={item}
-      expandedIndex={expandedIndex}
-      onExpansion={onExpansionHandler}
-    />
-  );
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({
+      y: (AppSettings.CONFIGS.BOOK.value - 1) * 76,
+      animated: true,
+    });
+  }, []);
 
   return (
-    <FlatList<vbwc.VBookWithChapters>
-      contentContainerStyle={{
+    <ScrollView
+      ref={scrollViewRef}
+      style={{
+        flex: 1,
         backgroundColor: Styles.Colors[theme].primaryBackground,
       }}
-      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ paddingVertical: 8 }}
       showsVerticalScrollIndicator={false}
-      data={books}
-      renderItem={renderItem}
-      overScrollMode="never"
-      ref={flatListRef}
-      keyExtractor={(item, index) => index.toString()}
-      getItemLayout={(data, index) => {
-        return {
-          length: 76,
-          offset: 76 * index,
-          index,
-        };
-      }}
-    />
+    >
+      {books.map((item, index) => (
+        <View key={index.toString()}>
+          <Item
+            index={index}
+            item={item}
+            expandedIndex={expandedIndex}
+            onExpansion={onExpansionHandler}
+          />
+        </View>
+      ))}
+    </ScrollView>
   );
 }

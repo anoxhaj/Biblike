@@ -1,37 +1,31 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text } from "react-native";
-import {
-  openDatabaseAsync,
-  openDatabaseSync,
-  SQLiteDatabase,
-} from "expo-sqlite";
-import { useFocusEffect } from "@react-navigation/native";
+import { openDatabaseAsync } from "expo-sqlite";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 
 import * as c from "../../models/Configs";
 import * as Styles from "../../constants/Styles";
 import * as AppSettings from "../../constants/AppSettings";
 import useColorScheme from "../../hooks/useColorScheme";
+import React from "react";
 
 export default function SettingsScreen() {
   const theme = useColorScheme();
-  let db: SQLiteDatabase = openDatabaseSync(
-    AppSettings.SQLiteConfigs.databaseName
+  const [configs, setConfigs] = useState<c.Configs[]>([]);
+
+  const fetchConfigs = useCallback(async () => {
+    const database = await openDatabaseAsync(
+      AppSettings.SQLiteConfigs.databaseName
+    );
+    const configData = await c.GetAllAsync(database);
+    setConfigs(configData);
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchConfigs();
+    }, [fetchConfigs])
   );
-  let [configs, setConfigs] = useState<c.Configs[]>([]);
-
-  const fetchConfigs = useCallback(() => {
-    async function fetch(): Promise<void> {
-      db = await openDatabaseAsync(AppSettings.SQLiteConfigs.databaseName);
-      setConfigs(await c.GetAllAsync(db));
-    }
-
-    fetch();
-    db.closeAsync();
-  }, [db]);
-
-  useFocusEffect(() => {
-    fetchConfigs();
-  });
 
   return (
     <>
@@ -39,6 +33,7 @@ export default function SettingsScreen() {
         style={{
           backgroundColor: Styles.Colors[theme].primaryBackground,
           height: "100%",
+          paddingTop: 30,
         }}
       >
         {configs.map((item, index) => (

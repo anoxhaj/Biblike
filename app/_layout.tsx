@@ -1,16 +1,14 @@
-import { useState, useEffect, memo } from "react";
-import { useColorScheme } from "react-native";
+import { useState, useEffect } from "react";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
-  NavigationContainer,
-  NavigationIndependentTree,
 } from "@react-navigation/native";
-import { Stack, useRootNavigationState } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { SQLiteDatabase, SQLiteProvider, openDatabaseAsync } from "expo-sqlite";
+import { openDatabaseAsync } from "expo-sqlite";
+import * as NavigationBar from "expo-navigation-bar";
 
 import * as AppSettings from "../constants/AppSettings";
 import useColorSchemeDefault from "../hooks/useColorScheme";
@@ -18,6 +16,7 @@ import * as c from "../models/Configs";
 
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -74,9 +73,26 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    const navBarColor = async () => {
+      await NavigationBar.setBackgroundColorAsync(
+        theme === "dark" ? "#0C080C" : "#F7F3F7"
+      );
+
+      await NavigationBar.setButtonStyleAsync(
+        theme === "dark" ? "light" : "dark"
+      );
+    };
+    navBarColor();
+  }, [theme]);
+
   if (loaded) {
     return (
       <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
+        <StatusBar
+          style="auto"
+          backgroundColor={theme === "dark" ? "#0C080C" : "#F7F3F7"}
+        />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

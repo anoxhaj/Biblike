@@ -151,9 +151,14 @@ export default function Reader({
   const theme = useColorScheme();
   const styles = BuildStyleSheet(theme);
 
+  function setConfigs() {
+    AppSettings.CONFIGS.BOOK.value = chapter?.bookId;
+    return true;
+  }
+
   return (
     <>
-      {chapter ? (
+      {chapter && setConfigs() ? (
         <>
           <ScrollView
             overScrollMode="never"
