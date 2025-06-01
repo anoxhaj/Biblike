@@ -52,7 +52,8 @@ export default function ReferencesGrid() {
         flex: 1,
         backgroundColor: Styles.Colors[theme].primaryBackground,
       }}
-      contentContainerStyle={{ paddingVertical: 8 }}
+      overScrollMode="never"
+      contentContainerStyle={{ paddingVertical: 0 }}
       showsVerticalScrollIndicator={false}
     >
       {books.map((item, index) => (
