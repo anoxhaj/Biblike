@@ -35,6 +35,11 @@ export default function ReferencesGrid() {
   }, []);
 
   const onExpansionHandler = (index: number) => {
+    scrollViewRef.current?.scrollTo({
+      y: index * 76,
+      animated: true,
+    });
+
     setExpandedIndex((prevIndex) => (prevIndex === index ? -1 : index));
   };
 
