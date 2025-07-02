@@ -1,13 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Animated,
-  ActivityIndicator,
-  Pressable,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, Animated } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useRouter } from "expo-router";
 
@@ -20,6 +12,7 @@ import * as Helper from "../../helpers/Helper";
 import * as vcwv from "../../models/VChapterWithVerses";
 import * as c from "../../models/Configs";
 import useColorScheme from "../../hooks/useColorScheme";
+import Loader from "../_shared/Loader";
 
 export default function Reader({
   versionId,
@@ -205,13 +198,7 @@ export default function Reader({
           )}
         </>
       ) : (
-        <View style={styles.loaderView}>
-          <ActivityIndicator
-            size="large"
-            color={Styles.Colors[theme].primaryText}
-            style={styles.loader}
-          />
-        </View>
+        <Loader />
       )}
     </>
   );
@@ -253,22 +240,6 @@ function BuildStyleSheet(theme: "dark" | "light") {
       fontFamily: Styles.Font.italic,
       fontSize: Styles.Font.size,
       color: Styles.Colors[theme].primaryText,
-    },
-    loaderView: {
-      backgroundColor: Styles.Colors[theme].primaryBackground,
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      width: "100%",
-    },
-    loader: {
-      backgroundColor: Styles.Colors[theme].primaryBackground,
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      width: "100%",
     },
     menu: {
       position: "absolute",

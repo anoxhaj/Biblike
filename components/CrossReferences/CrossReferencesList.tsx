@@ -1,11 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  FlatList,
-  Text,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { FlatList, Text, View, StyleSheet } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 
 import Verse from "../_shared/Verse";
@@ -14,6 +8,7 @@ import * as AppSettings from "../../constants/AppSettings";
 import * as Styles from "../../constants/Styles";
 import * as vcr from "../../models/VCrossReferences";
 import useColorScheme from "../../hooks/useColorScheme";
+import Loader from "../_shared/Loader";
 
 export default function CrossReferencesList() {
   const db = useSQLiteContext();
@@ -92,13 +87,7 @@ export default function CrossReferencesList() {
           </View>
         )
       ) : (
-        <View style={styles.loaderView}>
-          <ActivityIndicator
-            size="large"
-            color={Styles.Colors[theme].primaryText}
-            style={styles.loader}
-          />
-        </View>
+        <Loader />
       )}
     </>
   );
@@ -120,14 +109,6 @@ function BuildStyleSheet(theme: "dark" | "light") {
       color: Styles.Colors[theme].primaryText,
     },
     loaderView: {
-      backgroundColor: Styles.Colors[theme].primaryBackground,
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      width: "100%",
-    },
-    loader: {
       backgroundColor: Styles.Colors[theme].primaryBackground,
       flex: 1,
       justifyContent: "center",
