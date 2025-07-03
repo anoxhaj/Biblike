@@ -9,10 +9,10 @@ import * as Styles from "../../constants/Styles";
 import * as vbwc from "../../models/VBookWithChapters";
 import useColorScheme from "../../hooks/useColorScheme";
 
-export default function ReferencesGrid() {
+export default function ReferencesGrid({ bookId }: { bookId: number }) {
   const db = useSQLiteContext();
   const [books, setBooks] = useState<vbwc.VBookWithChapters[]>([]);
-  const [expandedIndex, setExpandedIndex] = useState<number>(-1);
+  const [expandedIndex, setExpandedIndex] = useState<number>(bookId - 1);
   const scrollViewRef = useRef<ScrollView>(null);
   const theme = useColorScheme();
 
@@ -20,10 +20,7 @@ export default function ReferencesGrid() {
     async function fetch() {
       await db.withExclusiveTransactionAsync(async () => {
         setBooks(
-          await vbwc.GetAllByLanguageAsync(
-            db,
-            AppSettings.CONFIGS.LANGUAGE.value
-          )
+          await vbwc.GetAllByVersionAsync(db, AppSettings.CONFIGS.VERSION.value)
         );
       });
     }
@@ -44,10 +41,12 @@ export default function ReferencesGrid() {
   };
 
   useEffect(() => {
-    scrollViewRef.current?.scrollTo({
-      y: (AppSettings.CONFIGS.BOOK.value - 1) * 76,
-      animated: true,
-    });
+    setTimeout(() => {
+      scrollViewRef.current?.scrollTo({
+        y: (bookId - 1) * 76,
+        animated: true,
+      });
+    }, 100);
   }, []);
 
   return (

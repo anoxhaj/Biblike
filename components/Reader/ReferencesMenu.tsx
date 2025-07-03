@@ -1,5 +1,6 @@
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import { useRouter, Link } from "expo-router";
+import Entypo from "@expo/vector-icons/Entypo";
 
 import * as Helper from "../../helpers/Helper";
 
@@ -9,11 +10,13 @@ import useColorScheme from "../../hooks/useColorScheme";
 export default function ReferencesMenu({
   versionId,
   chapterId,
+  bookId,
   bookName,
   chapterNumber,
 }: {
   versionId: number;
   chapterId: number;
+  bookId: number;
   bookName: string;
   chapterNumber: number;
 }) {
@@ -34,16 +37,39 @@ export default function ReferencesMenu({
             style={styles.linkContainer}
             onPress={() => goToChapterScreen(chapterId - 1)}
           >
-            <Text style={styles.link}>{chapterId == 1 ? "" : "{"}</Text>
+            <Text style={styles.link}>
+              {chapterId == 1 ? (
+                ""
+              ) : (
+                <Entypo
+                  name="chevron-left"
+                  size={24}
+                  color={Styles.Colors[theme].primaryText}
+                />
+              )}
+            </Text>
           </Pressable>
-          <Link style={styles.mainLink} href="bible/references">
+          <Link
+            style={styles.mainLink}
+            href={`bible/references?bookId=${bookId}`}
+          >
             {bookName + " " + chapterNumber}
           </Link>
           <Pressable
             style={styles.linkContainer}
             onPress={() => goToChapterScreen(chapterId + 1)}
           >
-            <Text style={styles.link}>{chapterId == 1189 ? "" : "}"}</Text>
+            <Text style={styles.link}>
+              {chapterId == 1189 ? (
+                ""
+              ) : (
+                <Entypo
+                  name="chevron-right"
+                  size={24}
+                  color={Styles.Colors[theme].primaryText}
+                />
+              )}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -60,10 +86,6 @@ function BuildStyleSheet(theme: "dark" | "light") {
       flexDirection: "row",
       justifyContent: "center",
       backgroundColor: Styles.Colors[theme].primaryBackground,
-      position: "absolute",
-      bottom: 0,
-      width: "100%",
-      zIndex: 1,
     },
     referencesContainer: {
       backgroundColor: Styles.Colors[theme].secondaryBackground,
@@ -72,7 +94,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       borderRadius: 24,
       padding: 12,
       height: 50.9,
-      width: "80%",
+      width: 330,
     },
     mainLink: {
       fontSize: 21,

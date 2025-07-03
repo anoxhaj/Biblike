@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { BackHandler } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 
 import ReferencesGrid from "../../../components/Grid/ReferencesGrid";
@@ -23,9 +23,12 @@ export default function ReferencesScreen() {
     };
   }, []);
 
+  const { bookId } = useLocalSearchParams();
+  const bookN = Number(bookId);
+
   return (
     <SQLiteProvider databaseName={AppSettings.SQLiteConfigs.databaseName}>
-      <ReferencesGrid />
+      <ReferencesGrid bookId={bookN} />
     </SQLiteProvider>
   );
 }

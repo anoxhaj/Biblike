@@ -23,9 +23,9 @@ interface Helper {
 }
 
 // READ
-export async function GetAllByLanguageAsync(
+export async function GetAllByVersionAsync(
   db: SQLiteDatabase,
-  language_id: number
+  version_id: number
 ): Promise<VBookWithChapters[]> {
   let data = await db.getAllAsync<Helper>(
     `SELECT
@@ -39,8 +39,8 @@ export async function GetAllByLanguageAsync(
       INNER JOIN book_translations ON books.id = book_translations.book_id
       INNER JOIN chapters ON books.id = chapters.book_id
     WHERE
-      book_translations.language_id = $language_id;`,
-    { $language_id: language_id }
+      book_translations.language_id = (SELECT language_id FROM versions WHERE id = $version_id);`,
+    { $version_id: version_id }
   );
 
   const result = data.reduce<VBookWithChapters[]>(

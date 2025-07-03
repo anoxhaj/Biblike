@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { openDatabaseAsync } from "expo-sqlite";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 
@@ -19,6 +19,11 @@ export default function SettingsScreen() {
     );
     const configData = await c.GetAllAsync(database);
     setConfigs(configData);
+  }, []);
+
+  const set = useCallback(async () => {
+    const db = await openDatabaseAsync(AppSettings.SQLiteConfigs.databaseName);
+    AppSettings.CONFIGS.VERSION.SetAsync(db, 2);
   }, []);
 
   useFocusEffect(
@@ -51,7 +56,10 @@ export default function SettingsScreen() {
               {item.key}
             </Text>
             <Text style={{ color: Styles.Colors[theme].primaryText }}>
-              {item.value}
+              DB: {item.value}
+            </Text>
+            <Text style={{ color: Styles.Colors[theme].primaryText }}>
+              MEM: {AppSettings.CONFIGS[item.key].value}
             </Text>
           </View>
         ))}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { BackHandler } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 
 import CrossReferences from "../../../components/CrossReferences/CrossReferencesList";
@@ -24,9 +24,12 @@ export default function CrossReferencesScreen() {
     };
   }, []);
 
+  const { verseId } = useLocalSearchParams();
+  const verseN = Number(verseId);
+
   return (
     <SQLiteProvider databaseName={AppSettings.SQLiteConfigs.databaseName}>
-      <CrossReferences />
+      <CrossReferences verseId={verseN} />
     </SQLiteProvider>
   );
 }

@@ -10,9 +10,9 @@ import * as Styles from "../../constants/Styles";
 import * as AppSettings from "../../constants/AppSettings";
 import * as Helper from "../../helpers/Helper";
 import * as vcwv from "../../models/VChapterWithVerses";
-import * as c from "../../models/Configs";
 import useColorScheme from "../../hooks/useColorScheme";
 import Loader from "../_shared/Loader";
+import VersionsMenu from "./VersionsMenu";
 
 export default function Reader({
   versionId,
@@ -29,11 +29,7 @@ export default function Reader({
     async function fetch() {
       await db.withExclusiveTransactionAsync(async () => {
         setChapter(await vcwv.GetChapterByIdAsync(db, versionId, chapterId));
-        let entity: c.Configs = {
-          key: AppSettings.CONFIGS.CHAPTER.key,
-          value: chapterId.toString(),
-        };
-        await c.UpdateAsync(db, entity);
+        await AppSettings.CONFIGS.CHAPTER.SetAsync(db, chapterId);
       });
     }
     fetch();
@@ -47,17 +43,30 @@ export default function Reader({
   const [selectedVerseId, setSelectedVerseId] = useState<number | null>(null);
   const scrollY = new Animated.Value(0);
   const slideAnim = new Animated.Value(100);
+  const slideVersionsAnim = new Animated.Value(-100);
 
   function animate() {
     if (!selectedVerseId) {
       Animated.timing(slideAnim, {
         toValue: showMenu ? 0 : -100,
-        duration: 200,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+
+      Animated.timing(slideVersionsAnim, {
+        toValue: showMenu ? 0 : 100,
+        duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(slideAnim, {
         toValue: showMenu ? 0 : -100,
+        duration: 0,
+        useNativeDriver: true,
+      }).start();
+
+      Animated.timing(slideVersionsAnim, {
+        toValue: showMenu ? 0 : 100,
         duration: 0,
         useNativeDriver: true,
       }).start();
@@ -124,7 +133,7 @@ export default function Reader({
 
   const goToCrossReferencesScreen = async (verseId: number) => {
     if (selectedVerseId === verseId) {
-      router.push(Helper.buildCrossReferencesUrl(versionId, verseId));
+      router.push(Helper.buildCrossReferencesUrl(verseId));
     } else {
       setSelectedVerseId(verseId);
     }
@@ -144,19 +153,28 @@ export default function Reader({
   const theme = useColorScheme();
   const styles = BuildStyleSheet(theme);
 
-  function setConfigs() {
-    AppSettings.CONFIGS.BOOK.value = chapter?.bookId;
-    return true;
-  }
-
   return (
     <>
-      {chapter && setConfigs() ? (
+      {chapter ? (
         <>
+          {showMenu && (
+            <Animated.View
+              style={[
+                styles.versionsMenu,
+                { transform: [{ translateY: slideVersionsAnim }] },
+              ]}
+            >
+              <VersionsMenu
+                versionId={versionId}
+                chapterId={chapterId}
+              ></VersionsMenu>
+            </Animated.View>
+          )}
+
           <ScrollView
             overScrollMode="never"
             contentContainerStyle={{
-              paddingTop: 60,
+              paddingTop: 120,
               paddingBottom: 60,
               backgroundColor: Styles.Colors[theme].primaryBackground,
             }}
@@ -191,6 +209,7 @@ export default function Reader({
               <ReferencesMenu
                 versionId={versionId}
                 chapterId={chapterId}
+                bookId={chapter.bookId}
                 bookName={chapter?.bookName ?? ""}
                 chapterNumber={chapter?.chapterNumber ?? 0}
               ></ReferencesMenu>
@@ -246,6 +265,13 @@ function BuildStyleSheet(theme: "dark" | "light") {
       bottom: 0,
       left: 0,
       right: 0,
+    },
+    versionsMenu: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1,
     },
   });
 }

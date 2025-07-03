@@ -10,7 +10,7 @@ import * as vcr from "../../models/VCrossReferences";
 import useColorScheme from "../../hooks/useColorScheme";
 import Loader from "../_shared/Loader";
 
-export default function CrossReferencesList() {
+export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();
   const [crosses, setCrosses] = useState<vcr.VCrossReferences[] | null>(null);
 
@@ -21,7 +21,7 @@ export default function CrossReferencesList() {
           await vcr.GetByVerseIdAsync(
             db,
             AppSettings.CONFIGS.VERSION.value,
-            AppSettings.CONFIGS.VERSE.value
+            verseId
           )
         );
       });
