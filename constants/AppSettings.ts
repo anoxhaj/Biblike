@@ -10,7 +10,7 @@ export let CONFIGS: any = {
     value: 2,
     SetAsync: async function SetAsync(db: SQLiteDatabase, value: number) {
       this.value = value;
-      c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
+      await c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
     },
   },
   VERSION: {
@@ -18,7 +18,7 @@ export let CONFIGS: any = {
     value: 1,
     SetAsync: async function SetAsync(db: SQLiteDatabase, value: number) {
       this.value = value;
-      c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
+      await c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
     },
   },
   CHAPTER: {
@@ -26,7 +26,7 @@ export let CONFIGS: any = {
     value: 1,
     SetAsync: async function SetAsync(db: SQLiteDatabase, value: number) {
       this.value = value;
-      c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
+      await c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
     },
   },
   VERSE: {
@@ -34,7 +34,7 @@ export let CONFIGS: any = {
     value: 1,
     SetAsync: async function SetAsync(db: SQLiteDatabase, value: number) {
       this.value = value;
-      // c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
+      // await c.UpdateAsync(db, { key: this.key, value: this.value.toString() });
     },
   },
 };

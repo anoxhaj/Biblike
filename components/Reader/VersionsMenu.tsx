@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet, Pressable, Text } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { View, StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { useSQLiteContext } from "expo-sqlite";
 

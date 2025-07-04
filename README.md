@@ -1,4 +1,4 @@
-# Biblike(1.1.1)
+# Biblike(1.1.2)
 
 A minimalistic offline Bible reading mobile application, built with:
 
@@ -16,7 +16,7 @@ A minimalistic offline Bible reading mobile application, built with:
 - Lajmi i Mire 1994 - ALBB (shqip)
 - King James 1987 - KJV (english)
 
-## Installation
+## Usage
 
 - You can find a pre-built preview `.apk` with eas cli for personal use [here](./builds).
 - **IMPORTANT**: Before uninstalling or updating the application, clear data to remove the database.

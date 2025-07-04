@@ -21,11 +21,6 @@ export default function SettingsScreen() {
     setConfigs(configData);
   }, []);
 
-  const set = useCallback(async () => {
-    const db = await openDatabaseAsync(AppSettings.SQLiteConfigs.databaseName);
-    AppSettings.CONFIGS.VERSION.SetAsync(db, 2);
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
       fetchConfigs();
