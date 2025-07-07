@@ -16,6 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import * as AppSettings from "../constants/AppSettings";
 import useColorSchemeDefault from "../hooks/useColorScheme";
 import * as c from "../models/Configs";
+import * as vvwl from "../models/VVersionsWithLanguage";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -53,6 +54,7 @@ export default function RootLayout() {
       try {
         const db = await openDatabaseAsync("database.db");
         AppSettings.MapConfigs(await c.GetAllAsync(db));
+        AppSettings.MapVersions(await vvwl.GetAllAsync(db));
         setLoaded(true);
       } catch {}
     }

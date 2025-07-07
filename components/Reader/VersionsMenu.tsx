@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
@@ -19,21 +18,6 @@ export default function VersionsMenu({
 }) {
   const router = useRouter();
   const db = useSQLiteContext();
-
-  const [versions, setVersions] = useState<vvwl.VVersionsWithLanguage[]>([]);
-
-  const fetchVersions = useCallback(() => {
-    async function fetch() {
-      await db.withExclusiveTransactionAsync(async () => {
-        setVersions(await vvwl.GetAllAsync(db));
-      });
-    }
-    fetch();
-  }, [db]);
-
-  useEffect(() => {
-    fetchVersions();
-  }, []);
 
   const theme = useColorScheme();
   const styles = BuildStyleSheet(theme);
@@ -69,7 +53,7 @@ export default function VersionsMenu({
               );
             }}
           >
-            {versions.map((value: vvwl.VVersionsWithLanguage) => (
+            {AppSettings.Versions.map((value: vvwl.VVersionsWithLanguage) => (
               <Picker.Item
                 key={value.id}
                 label={`${value.name} ${value.year} - ${value.abbreviation} (${value.languageName})`}

@@ -1,6 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 import * as c from "../models/Configs";
+import { VVersionsWithLanguage } from "../models/VVersionsWithLanguage";
 
 export let UP_TO_DATE: boolean = false;
 
@@ -48,6 +49,12 @@ export function MapConfigs(configs: c.Configs[]) {
       CONFIGS[key].value = parseInt(value);
     }
   });
+}
+
+export let Versions: VVersionsWithLanguage[] = [];
+
+export function MapVersions(versions: VVersionsWithLanguage[]) {
+  Versions = versions;
 }
 
 export const SQLiteConfigs = {
