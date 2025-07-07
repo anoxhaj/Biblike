@@ -9,7 +9,7 @@ A minimalistic offline Bible reading mobile application, built with:
 ### Features
 
 - Light/dark mode.
-- Cross-references (Tap a verse to select it, tap it another time to show the hidden view).
+- Cross-references (Tap a verse to select and underline it, tap it another time to show the hidden view).
 
 ### Bible Versions
 
