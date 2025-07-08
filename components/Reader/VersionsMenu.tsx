@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
-import { useSQLiteContext } from "expo-sqlite";
+import { openDatabaseAsync } from "expo-sqlite";
 
 import * as AppSettings from "../../constants/AppSettings";
 import * as Helper from "../../helpers/Helper";
@@ -17,8 +17,6 @@ export default function VersionsMenu({
   chapterId: number;
 }) {
   const router = useRouter();
-  const db = useSQLiteContext();
-
   const theme = useColorScheme();
   const styles = BuildStyleSheet(theme);
 
@@ -44,6 +42,9 @@ export default function VersionsMenu({
             selectedValue={AppSettings.CONFIGS.VERSION.value}
             selectionColor="blue"
             onValueChange={async (itemValue, itemIndex) => {
+              const db = await openDatabaseAsync(
+                AppSettings.SQLiteConfigs.databaseName
+              );
               await AppSettings.CONFIGS.VERSION.SetAsync(db, Number(itemValue));
               router.replace(
                 Helper.buildChapterUrl(
@@ -51,6 +52,7 @@ export default function VersionsMenu({
                   chapterId
                 )
               );
+              await db.closeAsync();
             }}
           >
             {AppSettings.Versions.map((value: vvwl.VVersionsWithLanguage) => (
