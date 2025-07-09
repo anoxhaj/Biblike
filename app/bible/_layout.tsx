@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 
-import useColorSchemeDefault from "../../../hooks/useColorScheme";
-import * as Styles from "../../../constants/Styles";
+import useColorSchemeDefault from "../../hooks/useColorScheme";
+import * as Styles from "../../constants/Styles";
 
 const StackLayout = () => {
   const theme = useColorSchemeDefault();

@@ -1,7 +1,7 @@
 import { useRouter, useFocusEffect } from "expo-router";
 
-import * as AppSettings from "../../../constants/AppSettings";
-import * as Helper from "../../../helpers/Helper";
+import * as AppSettings from "../../constants/AppSettings";
+import * as Helper from "../../helpers/Helper";
 
 export default function BibleScreen() {
   const router = useRouter();

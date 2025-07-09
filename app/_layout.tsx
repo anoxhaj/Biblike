@@ -95,7 +95,7 @@ export default function RootLayout() {
           backgroundColor={theme === "dark" ? "#0C080C" : "#F7F3F7"}
         />
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="bible" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>

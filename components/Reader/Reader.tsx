@@ -12,7 +12,6 @@ import * as Helper from "../../helpers/Helper";
 import * as vcwv from "../../models/VChapterWithVerses";
 import useColorScheme from "../../hooks/useColorScheme";
 import Loader from "../_shared/Loader";
-import VersionsMenu from "./VersionsMenu";
 
 export default function Reader({
   versionId,
@@ -43,7 +42,6 @@ export default function Reader({
   const [selectedVerseId, setSelectedVerseId] = useState<number | null>(null);
   const scrollY = new Animated.Value(0);
   const slideAnim = new Animated.Value(100);
-  const slideVersionsAnim = new Animated.Value(-100);
 
   function animate() {
     if (!selectedVerseId) {
@@ -52,21 +50,9 @@ export default function Reader({
         duration: 300,
         useNativeDriver: true,
       }).start();
-
-      Animated.timing(slideVersionsAnim, {
-        toValue: showMenu ? 0 : 100,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
     } else {
       Animated.timing(slideAnim, {
         toValue: showMenu ? 0 : -100,
-        duration: 0,
-        useNativeDriver: true,
-      }).start();
-
-      Animated.timing(slideVersionsAnim, {
-        toValue: showMenu ? 0 : 100,
         duration: 0,
         useNativeDriver: true,
       }).start();
@@ -157,24 +143,10 @@ export default function Reader({
     <>
       {chapter ? (
         <>
-          {showMenu && (
-            <Animated.View
-              style={[
-                styles.versionsMenu,
-                { transform: [{ translateY: slideVersionsAnim }] },
-              ]}
-            >
-              <VersionsMenu
-                versionId={versionId}
-                chapterId={chapterId}
-              ></VersionsMenu>
-            </Animated.View>
-          )}
-
           <ScrollView
             overScrollMode="never"
             contentContainerStyle={{
-              paddingTop: 120,
+              paddingTop: 60,
               paddingBottom: 60,
               backgroundColor: Styles.Colors[theme].primaryBackground,
             }}
@@ -265,13 +237,6 @@ function BuildStyleSheet(theme: "dark" | "light") {
       bottom: 0,
       left: 0,
       right: 0,
-    },
-    versionsMenu: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 1,
     },
   });
 }

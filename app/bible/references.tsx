@@ -3,8 +3,8 @@ import { BackHandler } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 
-import ReferencesGrid from "../../../components/Grid/ReferencesGrid";
-import * as AppSettings from "../../../constants/AppSettings";
+import ReferencesGrid from "../../components/Grid/ReferencesGrid";
+import * as AppSettings from "../../constants/AppSettings";
 
 export default function ReferencesScreen() {
   const router = useRouter();

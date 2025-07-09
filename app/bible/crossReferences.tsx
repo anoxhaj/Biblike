@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import { BackHandler } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
-import Reader from "../../../../components/Reader/Reader";
+import CrossReferences from "../../components/CrossReferences/CrossReferencesList";
 
-import * as AppSettings from "../../../../constants/AppSettings";
+import * as AppSettings from "../../constants/AppSettings";
 
-export default function ChapterScreen() {
+export default function CrossReferencesScreen() {
   const router = useRouter();
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        router.replace("/");
+        router.dismissAll();
         return true;
       }
     );
@@ -24,13 +24,12 @@ export default function ChapterScreen() {
     };
   }, []);
 
-  const { version, chapter } = useLocalSearchParams();
-  const chapterN = Number(chapter);
-  const versionN = Number(version);
+  const { verseId } = useLocalSearchParams();
+  const verseN = Number(verseId);
 
   return (
     <SQLiteProvider databaseName={AppSettings.SQLiteConfigs.databaseName}>
-      <Reader versionId={versionN} chapterId={chapterN}></Reader>
+      <CrossReferences verseId={verseN} />
     </SQLiteProvider>
   );
 }

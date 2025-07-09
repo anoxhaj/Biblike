@@ -1,9 +1,9 @@
-import { View, StyleSheet, Pressable, Text } from "react-native";
 import { useRouter, Link } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
+import { View, StyleSheet, Pressable, Text } from "react-native";
 
+import VersionsPicker from "./VersionsPicker";
 import * as Helper from "../../helpers/Helper";
-
 import * as Styles from "../../constants/Styles";
 import useColorScheme from "../../hooks/useColorScheme";
 
@@ -37,13 +37,13 @@ export default function ReferencesMenu({
             style={styles.linkContainer}
             onPress={() => goToChapterScreen(chapterId - 1)}
           >
-            <Text style={styles.link}>
+            <Text>
               {chapterId == 1 ? (
                 ""
               ) : (
                 <Entypo
                   name="chevron-left"
-                  size={24}
+                  size={21}
                   color={Styles.Colors[theme].primaryText}
                 />
               )}
@@ -59,19 +59,20 @@ export default function ReferencesMenu({
             style={styles.linkContainer}
             onPress={() => goToChapterScreen(chapterId + 1)}
           >
-            <Text style={styles.link}>
+            <Text>
               {chapterId == 1189 ? (
                 ""
               ) : (
                 <Entypo
                   name="chevron-right"
-                  size={24}
+                  size={21}
                   color={Styles.Colors[theme].primaryText}
                 />
               )}
             </Text>
           </Pressable>
         </View>
+        <VersionsPicker chapterId={chapterId}></VersionsPicker>
       </View>
     </>
   );
@@ -80,44 +81,38 @@ export default function ReferencesMenu({
 function BuildStyleSheet(theme: "dark" | "light") {
   return StyleSheet.create({
     borderContainer: {
-      padding: 12,
+      paddingVertical: 12,
+      height: 70,
       borderTopWidth: 1,
       borderTopColor: Styles.Colors[theme].secondaryBackground,
       flexDirection: "row",
-      justifyContent: "center",
+      justifyContent: "space-evenly",
+      alignItems: "center",
       backgroundColor: Styles.Colors[theme].primaryBackground,
     },
     referencesContainer: {
       backgroundColor: Styles.Colors[theme].secondaryBackground,
       flexDirection: "row",
       justifyContent: "space-between",
-      borderRadius: 24,
-      padding: 12,
-      height: 50.9,
-      width: 330,
+      borderRadius: 21,
+      padding: 6,
+      height: 50,
+      width: 300,
     },
     mainLink: {
-      fontSize: 21,
-      borderRadius: 24,
-      paddingHorizontal: 12,
-      paddingVertical: 0,
+      fontSize: Styles.Font.size,
+      paddingHorizontal: 60,
+      paddingVertical: 6,
       backgroundColor: Styles.Colors[theme].secondaryBackground,
-      fontFamily: Styles.Font.bold,
+      fontFamily: Styles.Font.regular,
       color: Styles.Colors[theme].primaryText,
     },
     linkContainer: {
-      width: 33,
+      width: 40,
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 6,
-      fontFamily: Styles.Font.bold,
-    },
-    link: {
-      fontSize: 21,
-      backgroundColor: Styles.Colors[theme].secondaryBackground,
-      fontFamily: Styles.Font.bold,
-      color: Styles.Colors[theme].primaryText,
     },
   });
 }
