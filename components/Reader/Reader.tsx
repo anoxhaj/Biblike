@@ -1,17 +1,26 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { ScrollView, StyleSheet, Text, Animated } from "react-native";
-import { useSQLiteContext } from "expo-sqlite";
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  withSpring,
+  withDelay,
+  runOnJS,
+  interpolate,
+} from "react-native-reanimated";
 import { useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import { StyleSheet, Text } from "react-native";
+import { useState, useEffect, useCallback } from "react";
 
-import ReferencesMenu from "./ReferencesMenu";
 import Verse from "../_shared/Verse";
-
-import * as Styles from "../../constants/Styles";
-import * as AppSettings from "../../constants/AppSettings";
-import * as Helper from "../../helpers/Helper";
-import * as vcwv from "../../models/VChapterWithVerses";
-import useColorScheme from "../../hooks/useColorScheme";
 import Loader from "../_shared/Loader";
+import Screen from "../_shared/Screen";
+import * as Helper from "@/helpers/Helper";
+import * as Styles from "@/constants/Styles";
+import ReferencesMenu from "./ReferencesMenu";
+import useColorScheme from "@/hooks/useColorScheme";
+import { useUpdateConfig } from "@/constants/store";
+import * as vcwv from "@/repositories/VChapterWithVerses";
 
 export default function Reader({
   versionId,
@@ -24,95 +33,165 @@ export default function Reader({
 
   const [chapter, setChapter] = useState<vcwv.VChapterWithVerses>();
 
+  const updateConfig = useUpdateConfig();
+
   const fetchChapter = useCallback(() => {
     async function fetch() {
       await db.withExclusiveTransactionAsync(async () => {
         setChapter(await vcwv.GetChapterByIdAsync(db, versionId, chapterId));
-        await AppSettings.CONFIGS.CHAPTER.SetAsync(db, chapterId);
+        await updateConfig("CHAPTER", chapterId, db);
       });
     }
     fetch();
-  }, [db]);
+  }, [db, versionId, chapterId, updateConfig]);
 
   useEffect(() => {
     fetchChapter();
-  }, []);
+  }, [fetchChapter]);
 
-  const [showMenu, setShowMenu] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
+
   const [selectedVerseId, setSelectedVerseId] = useState<number | null>(null);
-  const scrollY = new Animated.Value(0);
-  const slideAnim = new Animated.Value(100);
-
-  function animate() {
-    if (!selectedVerseId) {
-      Animated.timing(slideAnim, {
-        toValue: showMenu ? 0 : -100,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(slideAnim, {
-        toValue: showMenu ? 0 : -100,
-        duration: 0,
-        useNativeDriver: true,
-      }).start();
-    }
-  }
-
-  animate();
 
   useEffect(() => {
-    animate();
+    animateMenu(showMenu);
   }, [showMenu]);
 
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    {
-      useNativeDriver: false,
-    }
-  );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMenu(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const scrollY = useSharedValue(0);
+  const menuTranslateY = useSharedValue(300);
+  const menuScale = useSharedValue(0.8);
+  const menuOpacity = useSharedValue(0);
+  const menuShadowOpacity = useSharedValue(0);
+  const lastScrollValue = useSharedValue(0);
+  const lastScrollDownStopValue = useSharedValue(0);
+  const lastScrollUpStopValue = useSharedValue(0);
+  const scrollViewHeight = useSharedValue(0);
+  const scrollViewLayoutHeight = useSharedValue(0);
+  const prevScrollY = useSharedValue(0);
 
   const tolerance = 600;
-  const toleranceBottom = 1;
-  let scrollViewLayoutHeight = useRef(0);
-  let scrollViewHeight = useRef(0);
-  let lastScrollValue = useRef(0);
-  let lastScrollDownStopValue = useRef(0);
-  let lastScrollUpStopValue = useRef(0);
+  const bottomTolerance = 300;
+  const scrollUpTolerance = 300;
 
-  scrollY.addListener(({ value }) => {
-    if (
-      value <
-      scrollViewHeight.current -
-        scrollViewLayoutHeight.current -
-        toleranceBottom
-    ) {
-      if (
-        value > tolerance &&
-        lastScrollValue.current <= value &&
-        lastScrollUpStopValue.current + tolerance <= value
-      ) {
-        lastScrollDownStopValue.current = value;
-        setShowMenu(false);
-        lastScrollValue.current = value;
-        return;
-      }
+  useEffect(() => {
+    prevScrollY.value = 0;
+  }, []);
 
-      if (
-        lastScrollValue.current > value &&
-        lastScrollDownStopValue.current - tolerance > value
-      ) {
-        lastScrollDownStopValue.current = value;
-        lastScrollUpStopValue.current = value;
-        setShowMenu(true);
-        lastScrollValue.current = value;
-        return;
-      }
+  const animateMenu = (show: boolean) => {
+    if (show) {
+      menuTranslateY.value = withSpring(0, {
+        damping: 20,
+        stiffness: 100,
+        mass: 1,
+      });
+      menuScale.value = withDelay(
+        50,
+        withSpring(1, {
+          damping: 15,
+          stiffness: 120,
+          mass: 0.8,
+        })
+      );
+      menuOpacity.value = withDelay(
+        100,
+        withSpring(1, {
+          damping: 20,
+          stiffness: 100,
+          mass: 1,
+        })
+      );
+      menuShadowOpacity.value = withDelay(
+        150,
+        withSpring(0.3, {
+          damping: 20,
+          stiffness: 100,
+          mass: 1,
+        })
+      );
     } else {
-      lastScrollValue.current = value;
-      lastScrollDownStopValue.current = value;
-      if (!showMenu) setShowMenu(true);
+      menuShadowOpacity.value = withSpring(0, {
+        damping: 25,
+        stiffness: 80,
+        mass: 1.2,
+      });
+      menuOpacity.value = withDelay(
+        100,
+        withSpring(0, {
+          damping: 25,
+          stiffness: 80,
+          mass: 1.2,
+        })
+      );
+      menuScale.value = withDelay(
+        200,
+        withSpring(0.8, {
+          damping: 20,
+          stiffness: 90,
+          mass: 1,
+        })
+      );
+      menuTranslateY.value = withDelay(
+        300,
+        withSpring(300, {
+          damping: 25,
+          stiffness: 80,
+          mass: 1.2,
+        })
+      );
     }
+  };
+
+  const handleScroll = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      const currentY = event.contentOffset.y;
+      const isScrollingDown = currentY > prevScrollY.value + 1;
+      const isScrollingUp = currentY < prevScrollY.value - 1;
+
+      prevScrollY.value = scrollY.value;
+      scrollY.value = currentY;
+
+      const isNearBottom =
+        scrollY.value >=
+        scrollViewHeight.value - scrollViewLayoutHeight.value - bottomTolerance;
+
+      if (!isNearBottom) {
+        if (
+          isScrollingDown &&
+          scrollY.value > tolerance &&
+          scrollY.value >= lastScrollUpStopValue.value + tolerance
+        ) {
+          lastScrollDownStopValue.value = scrollY.value;
+          lastScrollValue.value = scrollY.value;
+          runOnJS(setShowMenu)(false);
+          return;
+        }
+
+        if (
+          isScrollingUp &&
+          lastScrollDownStopValue.value > 0 &&
+          scrollY.value <= lastScrollDownStopValue.value - scrollUpTolerance
+        ) {
+          lastScrollUpStopValue.value = scrollY.value;
+          lastScrollValue.value = scrollY.value;
+          runOnJS(setShowMenu)(true);
+          return;
+        }
+      } else {
+        lastScrollValue.value = scrollY.value;
+        lastScrollDownStopValue.value = scrollY.value;
+        lastScrollUpStopValue.value = scrollY.value;
+        if (!showMenu) {
+          runOnJS(setShowMenu)(true);
+        }
+      }
+    },
   });
 
   const router = useRouter();
@@ -139,11 +218,28 @@ export default function Reader({
   const theme = useColorScheme();
   const styles = BuildStyleSheet(theme);
 
+  const menuAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateY: menuTranslateY.value },
+        { scale: menuScale.value },
+      ],
+      opacity: menuOpacity.value,
+      shadowOpacity: menuShadowOpacity.value,
+      shadowRadius: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 8]),
+      shadowOffset: {
+        width: 0,
+        height: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 4]),
+      },
+      elevation: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 8]),
+    };
+  });
+
   return (
-    <>
+    <Screen>
       {chapter ? (
         <>
-          <ScrollView
+          <Animated.ScrollView
             overScrollMode="never"
             contentContainerStyle={{
               paddingTop: 60,
@@ -161,37 +257,32 @@ export default function Reader({
             onScroll={handleScroll}
             onLayout={(event: any) => {
               const { height } = event.nativeEvent.layout;
-              if (scrollViewLayoutHeight.current < height)
-                scrollViewLayoutHeight.current = height;
+              scrollViewLayoutHeight.value = height;
             }}
             onContentSizeChange={(w, h) => {
-              if (scrollViewHeight.current < h) scrollViewHeight.current = h;
+              scrollViewHeight.value = h;
             }}
           >
             <Text style={styles.bookName}>{chapter?.bookName}</Text>
             <Text style={styles.chapterNumber}>{chapter?.chapterNumber}</Text>
             {chapter?.verses.map((item) => renderItem({ item }))}
             <Text style={styles.about}>~</Text>
-          </ScrollView>
+          </Animated.ScrollView>
 
-          {showMenu && (
-            <Animated.View
-              style={[styles.menu, { transform: [{ translateY: slideAnim }] }]}
-            >
-              <ReferencesMenu
-                versionId={versionId}
-                chapterId={chapterId}
-                bookId={chapter.bookId}
-                bookName={chapter?.bookName ?? ""}
-                chapterNumber={chapter?.chapterNumber ?? 0}
-              ></ReferencesMenu>
-            </Animated.View>
-          )}
+          <Animated.View style={[styles.menu, menuAnimatedStyle]}>
+            <ReferencesMenu
+              versionId={versionId}
+              chapterId={chapterId}
+              bookId={chapter.bookId}
+              bookName={chapter?.bookName ?? ""}
+              chapterNumber={chapter?.chapterNumber ?? 0}
+            ></ReferencesMenu>
+          </Animated.View>
         </>
       ) : (
         <Loader />
       )}
-    </>
+    </Screen>
   );
 }
 

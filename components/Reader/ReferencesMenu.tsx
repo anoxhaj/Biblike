@@ -2,10 +2,10 @@ import { useRouter, Link } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 
+import * as Helper from "@/helpers/Helper";
+import * as Styles from "@/constants/Styles";
 import VersionsPicker from "./VersionsPicker";
-import * as Helper from "../../helpers/Helper";
-import * as Styles from "../../constants/Styles";
-import useColorScheme from "../../hooks/useColorScheme";
+import useColorScheme from "@/hooks/useColorScheme";
 
 export default function ReferencesMenu({
   versionId,
@@ -49,10 +49,7 @@ export default function ReferencesMenu({
               )}
             </Text>
           </Pressable>
-          <Link
-            style={styles.mainLink}
-            href={`bible/references?bookId=${bookId}`}
-          >
+          <Link style={styles.mainLink} href={`references?bookId=${bookId}`}>
             {bookName + " " + chapterNumber}
           </Link>
           <Pressable
@@ -82,29 +79,29 @@ function BuildStyleSheet(theme: "dark" | "light") {
   return StyleSheet.create({
     borderContainer: {
       paddingVertical: 12,
+      paddingHorizontal: 12,
       height: 70,
       borderTopWidth: 1,
       borderTopColor: Styles.Colors[theme].secondaryBackground,
       flexDirection: "row",
       justifyContent: "space-evenly",
+      gap: 6,
       alignItems: "center",
       backgroundColor: Styles.Colors[theme].primaryBackground,
     },
     referencesContainer: {
       backgroundColor: Styles.Colors[theme].secondaryBackground,
       flexDirection: "row",
+      alignItems: "center",
       justifyContent: "space-between",
       borderRadius: 21,
       padding: 6,
       height: 50,
-      width: 300,
+      flex: 1,
     },
     mainLink: {
       fontSize: Styles.Font.size,
-      paddingHorizontal: 60,
-      paddingVertical: 6,
-      backgroundColor: Styles.Colors[theme].secondaryBackground,
-      fontFamily: Styles.Font.regular,
+      fontFamily: Styles.Font.bold,
       color: Styles.Colors[theme].primaryText,
     },
     linkContainer: {

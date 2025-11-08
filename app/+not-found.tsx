@@ -1,17 +1,15 @@
 import { useRouter, useFocusEffect } from "expo-router";
 
-import * as AppSettings from "../constants/AppSettings";
-import * as Helper from "../helpers/Helper";
+import * as Helper from "@/helpers/Helper";
+import { useCurrentVersion, useCurrentChapter } from "@/constants/store";
 
-export default function BibleScreen() {
+export default function NotFoundScreen() {
   const router = useRouter();
+  const currentVersion = useCurrentVersion();
+  const currentChapter = useCurrentChapter();
 
   useFocusEffect(() => {
-    const url = Helper.buildChapterUrl(
-      AppSettings.CONFIGS.VERSION.value,
-      AppSettings.CONFIGS.CHAPTER.value
-    );
-
+    const url = Helper.buildChapterUrl(currentVersion, currentChapter);
     router.replace(url);
   });
 

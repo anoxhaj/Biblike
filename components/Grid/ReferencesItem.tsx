@@ -1,18 +1,18 @@
 import {
   Text,
-  View,
   TouchableOpacity,
   StyleSheet,
   Pressable,
   Dimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
-import * as AppSettings from "../../constants/AppSettings";
-import * as Styles from "../../constants/Styles";
-import * as Helper from "../../helpers/Helper";
-import * as vbwc from "../../models/VBookWithChapters";
-import useColorScheme from "../../hooks/useColorScheme";
+import * as Helper from "@/helpers/Helper";
+import * as Styles from "@/constants/Styles";
+import useColorScheme from "@/hooks/useColorScheme";
+import { useCurrentVersion } from "@/constants/store";
+import * as vbwc from "@/repositories/VBookWithChapters";
 
 export default function ReferencesItem({
   index,
@@ -26,40 +26,42 @@ export default function ReferencesItem({
   onExpansion: any;
 }) {
   const router = useRouter();
+  const currentVersion = useCurrentVersion();
+  const theme = useColorScheme();
+  const styles = BuildStyleSheet(theme);
+
   const toggleExpand = () => {
     onExpansion(index);
   };
 
   const goToChapterScreen = (chapterId: number) => {
     router.dismissAll();
-    router.replace(
-      Helper.buildChapterUrl(AppSettings.CONFIGS.VERSION.value, chapterId)
-    );
+    router.replace(Helper.buildChapterUrl(currentVersion, chapterId));
   };
 
-  const theme = useColorScheme();
-  const styles = BuildStyleSheet(theme);
+  const isExpanded = expandedIndex === index;
+  const chapters = isExpanded ? item.chapters : [];
 
   return (
-    <View style={styles.expandable}>
+    <Animated.View
+      style={styles.expandable}
+      layout={LinearTransition.springify()}
+    >
       <TouchableOpacity onPress={toggleExpand} style={styles.titleContainer}>
         <Text style={styles.title}>{item.bookName}</Text>
       </TouchableOpacity>
-      <View style={styles.row}>
-        {expandedIndex == index &&
-          item.chapters.map((chapter) => (
-            <Pressable
-              key={chapter.chapterId}
-              style={styles.square}
-              onPress={() => goToChapterScreen(chapter.chapterId)}
-            >
-              <Text key={chapter.chapterId} style={styles.content}>
-                {chapter.chapterNo}
-              </Text>
-            </Pressable>
-          ))}
-      </View>
-    </View>
+      <Animated.View style={styles.row} layout={LinearTransition.springify()}>
+        {chapters.map((chapter) => (
+          <Pressable
+            key={chapter.chapterId}
+            style={styles.square}
+            onPress={() => goToChapterScreen(chapter.chapterId)}
+          >
+            <Text style={styles.content}>{chapter.chapterNo}</Text>
+          </Pressable>
+        ))}
+      </Animated.View>
+    </Animated.View>
   );
 }
 

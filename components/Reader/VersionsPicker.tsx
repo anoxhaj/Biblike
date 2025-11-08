@@ -1,122 +1,195 @@
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { openDatabaseAsync } from "expo-sqlite";
-import { View, Text, StyleSheet } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
+import { useSQLiteContext } from "expo-sqlite";
 
-import * as Helper from "../../helpers/Helper";
-import * as Styles from "../../constants/Styles";
-import useColorScheme from "../../hooks/useColorScheme";
-import * as AppSettings from "../../constants/AppSettings";
-import * as vvwl from "../../models/VVersionsWithLanguage";
+import {
+  useUpdateConfig,
+  useCurrentVersion,
+  useAppVersions,
+} from "@/constants/store";
+import * as Helper from "@/helpers/Helper";
+import * as Styles from "@/constants/Styles";
+import useColorScheme from "@/hooks/useColorScheme";
 
 export default function VersionsPicker({ chapterId }: { chapterId: number }) {
   const router = useRouter();
+  const db = useSQLiteContext();
   const theme = useColorScheme();
   const styles = BuildStyleSheet(theme);
+  const currentVersion = useCurrentVersion();
+  const versions = useAppVersions();
+  const updateConfig = useUpdateConfig();
 
-  const [selectedVersion, setSelectedVersion] = useState<number | null>(
-    AppSettings.CONFIGS.VERSION.value
-  );
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleVersionChange = async (value: number) => {
-    if (value === AppSettings.CONFIGS.VERSION.value) return;
+    if (value === currentVersion) {
+      setModalVisible(false);
+      return;
+    }
 
-    setSelectedVersion(value);
-    const db = await openDatabaseAsync(AppSettings.SQLiteConfigs.databaseName);
-    await AppSettings.CONFIGS.VERSION.SetAsync(db, Number(value));
-    router.replace(
-      Helper.buildChapterUrl(AppSettings.CONFIGS.VERSION.value, chapterId)
-    );
-    await db.closeAsync();
+    await updateConfig("VERSION", Number(value), db);
+    setModalVisible(false);
+    router.replace(Helper.buildChapterUrl(value, chapterId));
   };
 
   const getAbbreviation = (id: number | null) => {
-    const found = AppSettings.Versions.find((v) => v.id === id);
+    const found = versions.find((v) => v.id === id);
     return found?.abbreviation || "Select Version";
   };
 
-  const versions = AppSettings.Versions.map(
-    (v: vvwl.VVersionsWithLanguage) => ({
-      label: `${v.name} (${v.abbreviation}) ${v.year}`,
-      value: v.id,
-    })
-  );
-
   return (
-    <View style={styles.circleWrapper}>
-      <Text style={styles.circleText}>{getAbbreviation(selectedVersion)}</Text>
-      <RNPickerSelect
-        onValueChange={handleVersionChange}
-        items={versions}
-        value={selectedVersion}
-        useNativeAndroidPickerStyle={false}
-        placeholder={{}}
-        style={circlePickerStyles(Styles.Colors[theme])}
-      />
-    </View>
+    <>
+      <TouchableOpacity
+        style={styles.circleWrapper}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.circleText}>{getAbbreviation(currentVersion)}</Text>
+      </TouchableOpacity>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Version</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={styles.closeButton}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={styles.scrollView}>
+              {versions.map((version) => (
+                <TouchableOpacity
+                  key={version.id}
+                  style={[
+                    styles.versionItem,
+                    version.id === currentVersion && styles.versionItemSelected,
+                  ]}
+                  onPress={() => handleVersionChange(version.id)}
+                >
+                  <Text
+                    style={[
+                      styles.versionText,
+                      version.id === currentVersion &&
+                        styles.versionTextSelected,
+                    ]}
+                  >
+                    {version.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.versionSubtext,
+                      version.id === currentVersion &&
+                        styles.versionSubtextSelected,
+                    ]}
+                  >
+                    {version.abbreviation} • {version.year}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </Pressable>
+      </Modal>
+    </>
   );
 }
 
-const WIDTH = 60;
+const WIDTH = 66;
 const HEIGHT = 50;
 
-const circlePickerStyles = (
-  colors: typeof Styles.Colors.light | typeof Styles.Colors.dark
-) =>
-  StyleSheet.create({
-    inputIOS: {
-      width: WIDTH,
-      borderRadius: 21,
-      padding: 6,
-      height: HEIGHT,
-      backgroundColor: colors.secondaryBackground,
-      color: "transparent",
-      fontFamily: Styles.Font.regular,
-    },
-    inputAndroid: {
-      width: WIDTH,
-      borderRadius: 21,
-      padding: 6,
-      height: HEIGHT,
-      backgroundColor: colors.secondaryBackground,
-      color: "transparent",
-    },
-    iconContainer: {
-      display: "none",
-    },
-  });
-
 function BuildStyleSheet(theme: "dark" | "light") {
+  const colors = Styles.Colors[theme];
+
   return StyleSheet.create({
-    container: {
-      marginVertical: 16,
-      alignItems: "center",
-    },
-    label: {
-      fontSize: 16,
-      marginBottom: 10,
-      fontWeight: "600",
-      color: Styles.Colors[theme].primaryText,
-    },
     circleWrapper: {
       position: "relative",
       width: WIDTH,
       height: HEIGHT,
       borderRadius: 21,
+      backgroundColor: colors.secondaryBackground,
       justifyContent: "center",
       alignItems: "center",
     },
     circleText: {
-      position: "absolute",
-      zIndex: 1,
-      fontSize: 18,
-      color: Styles.Colors[theme].primaryText,
-      textAlign: "center",
-      textAlignVertical: "center",
-      width: WIDTH,
-      height: HEIGHT,
+      fontSize: 16,
+      color: colors.primaryText,
+      fontFamily: Styles.Font.bold,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modalContent: {
+      backgroundColor: colors.primaryBackground,
+      borderRadius: 16,
+      width: "85%",
+      maxHeight: "70%",
+      overflow: "hidden",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.secondaryBackground,
+    },
+    modalTitle: {
+      fontSize: 20,
+      color: colors.primaryText,
+      fontFamily: Styles.Font.bold,
+    },
+    closeButton: {
+      fontSize: 24,
+      color: colors.secondaryText,
+    },
+    scrollView: {
+      maxHeight: "100%",
+    },
+    versionItem: {
+      padding: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.secondaryBackground,
+    },
+    versionItemSelected: {
+      backgroundColor: colors.secondaryBackground,
+    },
+    versionText: {
+      fontSize: 16,
+      color: colors.primaryText,
+      fontFamily: Styles.Font.bold,
+      marginBottom: 4,
+    },
+    versionTextSelected: {
+      color: colors.primaryText,
+    },
+    versionSubtext: {
+      fontSize: 14,
+      color: colors.secondaryText,
       fontFamily: Styles.Font.regular,
+    },
+    versionSubtextSelected: {
+      color: colors.secondaryText,
     },
   });
 }

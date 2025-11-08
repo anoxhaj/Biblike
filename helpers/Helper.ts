@@ -1,7 +1,7 @@
 export function buildChapterUrl(versionId: number, chapterId: number): string {
-  return "/bible/" + versionId + "/" + chapterId;
+  return "/read?versionId=" + versionId + "&chapterId=" + chapterId;
 }
 
 export function buildCrossReferencesUrl(verseId: number): string {
-  return `/bible/crossReferences?verseId=${verseId}`;
+  return `/crossReferences?verseId=${verseId}`;
 }

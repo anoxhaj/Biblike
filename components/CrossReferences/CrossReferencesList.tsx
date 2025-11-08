@@ -3,35 +3,30 @@ import { FlatList, Text, View, StyleSheet } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 
 import Verse from "../_shared/Verse";
-
-import * as AppSettings from "../../constants/AppSettings";
-import * as Styles from "../../constants/Styles";
-import * as vcr from "../../models/VCrossReferences";
-import useColorScheme from "../../hooks/useColorScheme";
 import Loader from "../_shared/Loader";
+import Screen from "../_shared/Screen";
+import * as Styles from "@/constants/Styles";
+import useColorScheme from "@/hooks/useColorScheme";
+import { useCurrentVersion } from "@/constants/store";
+import * as vcr from "@/repositories/VCrossReferences";
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();
   const [crosses, setCrosses] = useState<vcr.VCrossReferences[] | null>(null);
+  const currentVersion = useCurrentVersion();
 
   const fetchCrosses = useCallback(() => {
     async function fetch() {
       await db.withExclusiveTransactionAsync(async () => {
-        setCrosses(
-          await vcr.GetByVerseIdAsync(
-            db,
-            AppSettings.CONFIGS.VERSION.value,
-            verseId
-          )
-        );
+        setCrosses(await vcr.GetByVerseIdAsync(db, currentVersion, verseId));
       });
     }
     fetch();
-  }, [db]);
+  }, [db, currentVersion, verseId]);
 
   useEffect(() => {
     fetchCrosses();
-  }, []);
+  }, [fetchCrosses]);
 
   const renderItem = ({ item }: { item: vcr.VCrossReferences }) => (
     <View key={item.id} style={styles.referenceContainer}>
@@ -61,7 +56,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const styles = BuildStyleSheet(theme);
 
   return (
-    <>
+    <Screen removeTopEdge={true}>
       {crosses ? (
         crosses.length > 0 ? (
           <FlatList<vcr.VCrossReferences>
@@ -89,7 +84,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
       ) : (
         <Loader />
       )}
-    </>
+    </Screen>
   );
 }
 
