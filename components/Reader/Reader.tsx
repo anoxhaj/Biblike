@@ -4,9 +4,9 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
   withDelay,
-  runOnJS,
   interpolate,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { StyleSheet, Text } from "react-native";
@@ -169,7 +169,7 @@ export default function Reader({
         ) {
           lastScrollDownStopValue.value = scrollY.value;
           lastScrollValue.value = scrollY.value;
-          runOnJS(setShowMenu)(false);
+          scheduleOnRN(setShowMenu, false);
           return;
         }
 
@@ -180,7 +180,7 @@ export default function Reader({
         ) {
           lastScrollUpStopValue.value = scrollY.value;
           lastScrollValue.value = scrollY.value;
-          runOnJS(setShowMenu)(true);
+          scheduleOnRN(setShowMenu, true);
           return;
         }
       } else {
@@ -188,7 +188,7 @@ export default function Reader({
         lastScrollDownStopValue.value = scrollY.value;
         lastScrollUpStopValue.value = scrollY.value;
         if (!showMenu) {
-          runOnJS(setShowMenu)(true);
+          scheduleOnRN(setShowMenu, true);
         }
       }
     },
