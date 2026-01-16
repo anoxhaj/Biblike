@@ -4,14 +4,13 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useEffect } from "react";
-import { Stack } from "expo-router";
+import { Drawer } from "expo-router/drawer";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
-import * as Styles from "@/constants/Styles";
 import useColorSchemeDefault from "@/hooks/useColorScheme";
 import { useSettingsLoading, useAppSettingsStore } from "@/constants/store";
 
@@ -68,7 +67,8 @@ function AppContent() {
         assetSource={{ assetId: require("@/assets/database.db") }}
         onInit={loadData}
       >
-        <Stack
+        <Drawer />
+        {/* <Stack
           screenOptions={{
             headerStyle: {
               backgroundColor: Styles.Colors[theme].primaryBackground,
@@ -107,8 +107,14 @@ function AppContent() {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="widget"
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen name="+not-found" />
-        </Stack>
+        </Stack> */}
       </SQLiteProvider>
     </ThemeProvider>
   );

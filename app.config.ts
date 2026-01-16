@@ -6,16 +6,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: "biblike",
   version: "1.2.1",
   orientation: "portrait",
-  icon: "./assets/icon.png",
+  icon: "./assets/images/icon.png",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   scheme: "biblike",
   splash: {
-    image: "./assets/icon.png",
+    image: "./assets/images/splash-icon.png",
     resizeMode: "contain",
     backgroundColor: "#F7F3F7",
     dark: {
-      image: "./assets/icon.png",
+      image: "./assets/images/splash-icon.png",
       backgroundColor: "#F7F3F7",
     },
   },
@@ -25,22 +25,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/icon.png",
-      backgroundColor: "#493149",
+      foregroundImage: "./assets/images/adaptive-icon.png",
+      backgroundColor: "#F7F3F7",
     },
     package: "com.anonymous.biblike",
   },
   plugins: [
     "expo-router",
-    "expo´dev-client",
+    "expo-dev-client",
     [
       "expo-sqlite",
       {
         enableFTS: true,
         useSQLCipher: true,
         android: {
-          enableFTS: false,
-          useSQLCipher: false,
+          enableFTS: true,
+          useSQLCipher: true,
         },
         ios: {
           customBuildFlags: [
