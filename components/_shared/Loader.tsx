@@ -1,17 +1,17 @@
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 
-import * as Styles from "@/constants/Styles";
-import useColorScheme from "@/hooks/useColorScheme";
+import { STYLES } from "@/constants";
+import { useColorSchemeDefault } from "@/hooks";
 
 export default function Loader() {
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   return (
     <View style={styles.loaderView}>
       <ActivityIndicator
         size="large"
-        color={Styles.Colors[theme].primaryText}
+        color={STYLES.COLORS[theme].TEXT.PRIMARY}
         style={styles.loader}
       />
     </View>
@@ -21,7 +21,7 @@ export default function Loader() {
 function BuildStyleSheet(theme: "dark" | "light") {
   return StyleSheet.create({
     loaderView: {
-      backgroundColor: Styles.Colors[theme].primaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
@@ -29,7 +29,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       width: "100%",
     },
     loader: {
-      backgroundColor: Styles.Colors[theme].primaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       flex: 1,
       justifyContent: "center",
       alignItems: "center",

@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text } from "react-native";
 
-import * as Styles from "@/constants/Styles";
-import useColorScheme from "@/hooks/useColorScheme";
+import { STYLES } from "@/constants";
+import { useColorSchemeDefault } from "@/hooks";
 
 export default function Verse({
   id,
@@ -16,7 +16,7 @@ export default function Verse({
   onPress: any;
   selected: boolean;
 }) {
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   return (
@@ -50,15 +50,15 @@ function BuildStyleSheet(theme: "dark" | "light") {
       marginVertical: 12,
     },
     itemText: {
-      fontFamily: Styles.Font.regular,
-      fontSize: Styles.Font.size,
+      fontFamily: STYLES.FONT.REGULAR,
+      fontSize: 21,
       lineHeight: 33,
-      color: Styles.Colors[theme].primaryText,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     superscript: {
-      fontFamily: Styles.Font.regular,
+      fontFamily: STYLES.FONT.REGULAR,
       fontSize: 13,
-      color: Styles.Colors[theme].secondaryText,
+      color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
   });
 }

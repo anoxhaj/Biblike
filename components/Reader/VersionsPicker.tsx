@@ -14,19 +14,19 @@ import { useSQLiteContext } from "expo-sqlite";
 import {
   useUpdateConfig,
   useCurrentVersion,
-  useAppVersions,
-} from "@/constants/store";
-import * as Helper from "@/helpers/Helper";
-import * as Styles from "@/constants/Styles";
-import useColorScheme from "@/hooks/useColorScheme";
+  useVersions,
+} from "@/stores/configs";
+import { urlBuilder } from "@/utils";
+import { STYLES } from "@/constants";
+import { useColorSchemeDefault } from "@/hooks";
 
 export default function VersionsPicker({ chapterId }: { chapterId: number }) {
   const router = useRouter();
   const db = useSQLiteContext();
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
   const currentVersion = useCurrentVersion();
-  const versions = useAppVersions();
+  const versions = useVersions();
   const updateConfig = useUpdateConfig();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,7 +39,7 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
 
     await updateConfig("VERSION", Number(value), db);
     setModalVisible(false);
-    router.replace(Helper.buildChapterUrl(value, chapterId));
+    router.replace(urlBuilder.chapter(value, chapterId));
   };
 
   const getAbbreviation = (id: number | null) => {
@@ -116,7 +116,7 @@ const WIDTH = 66;
 const HEIGHT = 50;
 
 function BuildStyleSheet(theme: "dark" | "light") {
-  const colors = Styles.Colors[theme];
+  const colors = STYLES.COLORS[theme];
 
   return StyleSheet.create({
     circleWrapper: {
@@ -124,14 +124,14 @@ function BuildStyleSheet(theme: "dark" | "light") {
       width: WIDTH,
       height: HEIGHT,
       borderRadius: 21,
-      backgroundColor: colors.secondaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       justifyContent: "center",
       alignItems: "center",
     },
     circleText: {
       fontSize: 16,
-      color: colors.primaryText,
-      fontFamily: Styles.Font.bold,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      fontFamily: STYLES.FONT.BOLD,
     },
     modalOverlay: {
       flex: 1,
@@ -140,7 +140,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       alignItems: "center",
     },
     modalContent: {
-      backgroundColor: colors.primaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       borderRadius: 16,
       width: "85%",
       maxHeight: "70%",
@@ -152,16 +152,16 @@ function BuildStyleSheet(theme: "dark" | "light") {
       alignItems: "center",
       padding: 20,
       borderBottomWidth: 1,
-      borderBottomColor: colors.secondaryBackground,
+      borderBottomColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
     },
     modalTitle: {
       fontSize: 20,
-      color: colors.primaryText,
-      fontFamily: Styles.Font.bold,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      fontFamily: STYLES.FONT.BOLD,
     },
     closeButton: {
       fontSize: 24,
-      color: colors.secondaryText,
+      color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
     scrollView: {
       maxHeight: "100%",
@@ -169,27 +169,27 @@ function BuildStyleSheet(theme: "dark" | "light") {
     versionItem: {
       padding: 16,
       borderBottomWidth: 1,
-      borderBottomColor: colors.secondaryBackground,
+      borderBottomColor: colors.BACKGROUND.SECONDARY,
     },
     versionItemSelected: {
-      backgroundColor: colors.secondaryBackground,
+      backgroundColor: colors.BACKGROUND.SECONDARY,
     },
     versionText: {
       fontSize: 16,
-      color: colors.primaryText,
-      fontFamily: Styles.Font.bold,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      fontFamily: STYLES.FONT.BOLD,
       marginBottom: 4,
     },
     versionTextSelected: {
-      color: colors.primaryText,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     versionSubtext: {
       fontSize: 14,
-      color: colors.secondaryText,
-      fontFamily: Styles.Font.regular,
+      color: STYLES.COLORS[theme].TEXT.SECONDARY,
+      fontFamily: STYLES.FONT.REGULAR,
     },
     versionSubtextSelected: {
-      color: colors.secondaryText,
+      color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
   });
 }

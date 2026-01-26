@@ -1,7 +1,7 @@
 import { useRouter, useFocusEffect } from "expo-router";
 
-import * as Helper from "@/helpers/Helper";
-import { useCurrentVersion, useCurrentChapter } from "@/constants/store";
+import { urlBuilder } from "@/utils";
+import { useCurrentVersion, useCurrentChapter } from "@/stores/configs";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const currentChapter = useCurrentChapter();
 
   useFocusEffect(() => {
-    const url = Helper.buildChapterUrl(currentVersion, currentChapter);
+    const url = urlBuilder.chapter(currentVersion, currentChapter);
     router.replace(url);
   });
 

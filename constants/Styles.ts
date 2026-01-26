@@ -1,21 +1,30 @@
-export const Colors = {
-  light: {
-    primaryText: "#0C080C",
-    secondaryText: "#493149",
-    primaryBackground: "#F7F3F7",
-    secondaryBackground: "#CEB6CE",
+export const STYLES = {
+  COLORS: {
+    light: {
+      TEXT: {
+        PRIMARY: "#0C080C",
+        SECONDARY: "#493149",
+      },
+      BACKGROUND: {
+        PRIMARY: "#F7F3F7",
+        SECONDARY: "#CEB6CE",
+      },
+    },
+    dark: {
+      TEXT: {
+        PRIMARY: "#F7F3F7",
+        SECONDARY: "#CEB6CE",
+      },
+      BACKGROUND: {
+        PRIMARY: "#0C080C",
+        SECONDARY: "#493149",
+      },
+    },
   },
-  dark: {
-    primaryText: "#F7F3F7",
-    secondaryText: "#CEB6CE",
-    primaryBackground: "#0C080C",
-    secondaryBackground: "#493149",
-  },
-};
 
-export const Font = {
-  regular: "SerifRegular",
-  italic: "SerifItalic",
-  bold: "SerifBold",
-  size: 21,
+  FONT: {
+    REGULAR: "SerifRegular",
+    ITALIC: "SerifItalic",
+    BOLD: "SerifBold",
+  },
 };

@@ -15,11 +15,11 @@ import { useState, useEffect, useCallback } from "react";
 import Verse from "../_shared/Verse";
 import Loader from "../_shared/Loader";
 import Screen from "../_shared/Screen";
-import * as Helper from "@/helpers/Helper";
-import * as Styles from "@/constants/Styles";
+import { urlBuilder } from "@/utils";
+import { STYLES } from "@/constants";
 import ReferencesMenu from "./ReferencesMenu";
-import useColorScheme from "@/hooks/useColorScheme";
-import { useUpdateConfig } from "@/constants/store";
+import { useColorSchemeDefault } from "@/hooks";
+import { useUpdateConfig } from "@/stores/configs";
 import * as vcwv from "@/repositories/VChapterWithVerses";
 
 export default function Reader({
@@ -97,7 +97,7 @@ export default function Reader({
           damping: 15,
           stiffness: 120,
           mass: 0.8,
-        })
+        }),
       );
       menuOpacity.value = withDelay(
         100,
@@ -105,7 +105,7 @@ export default function Reader({
           damping: 20,
           stiffness: 100,
           mass: 1,
-        })
+        }),
       );
       menuShadowOpacity.value = withDelay(
         150,
@@ -113,7 +113,7 @@ export default function Reader({
           damping: 20,
           stiffness: 100,
           mass: 1,
-        })
+        }),
       );
     } else {
       menuShadowOpacity.value = withSpring(0, {
@@ -127,7 +127,7 @@ export default function Reader({
           damping: 25,
           stiffness: 80,
           mass: 1.2,
-        })
+        }),
       );
       menuScale.value = withDelay(
         200,
@@ -135,7 +135,7 @@ export default function Reader({
           damping: 20,
           stiffness: 90,
           mass: 1,
-        })
+        }),
       );
       menuTranslateY.value = withDelay(
         300,
@@ -143,7 +143,7 @@ export default function Reader({
           damping: 25,
           stiffness: 80,
           mass: 1.2,
-        })
+        }),
       );
     }
   };
@@ -198,7 +198,7 @@ export default function Reader({
 
   const goToCrossReferencesScreen = async (verseId: number) => {
     if (selectedVerseId === verseId) {
-      router.push(Helper.buildCrossReferencesUrl(verseId));
+      router.push(urlBuilder.crossReference(verseId));
     } else {
       setSelectedVerseId(verseId);
     }
@@ -215,7 +215,7 @@ export default function Reader({
     ></Verse>
   );
 
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   const menuAnimatedStyle = useAnimatedStyle(() => {
@@ -244,7 +244,7 @@ export default function Reader({
             contentContainerStyle={{
               paddingTop: 60,
               paddingBottom: 60,
-              backgroundColor: Styles.Colors[theme].primaryBackground,
+              backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             }}
             style={{
               position: "absolute",
@@ -290,38 +290,38 @@ function BuildStyleSheet(theme: "dark" | "light") {
   return StyleSheet.create({
     bookName: {
       textAlign: "center",
-      fontFamily: Styles.Font.bold,
-      fontSize: Styles.Font.size,
-      color: Styles.Colors[theme].primaryText,
+      fontFamily: STYLES.FONT.BOLD,
+      fontSize: 21,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     chapterNumber: {
       textAlign: "center",
-      fontFamily: Styles.Font.bold,
+      fontFamily: STYLES.FONT.BOLD,
       fontSize: 66,
-      color: Styles.Colors[theme].primaryText,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     itemContainer: {
       marginHorizontal: 30,
       marginVertical: 12,
     },
     itemText: {
-      fontFamily: Styles.Font.regular,
-      fontSize: Styles.Font.size,
+      fontFamily: STYLES.FONT.REGULAR,
+      fontSize: 21,
       lineHeight: 33,
-      color: Styles.Colors[theme].primaryText,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     superscript: {
-      fontFamily: Styles.Font.regular,
+      fontFamily: STYLES.FONT.REGULAR,
       fontSize: 13,
-      color: Styles.Colors[theme].primaryText,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     about: {
       textAlign: "center",
       paddingTop: 120,
       paddingBottom: 30,
-      fontFamily: Styles.Font.italic,
-      fontSize: Styles.Font.size,
-      color: Styles.Colors[theme].primaryText,
+      fontFamily: STYLES.FONT.ITALIC,
+      fontSize: 21,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     menu: {
       position: "absolute",

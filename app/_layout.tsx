@@ -4,20 +4,21 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useEffect } from "react";
-import { Drawer } from "expo-router/drawer";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import { STYLES } from "@/constants";
 
-import useColorSchemeDefault from "@/hooks/useColorScheme";
-import { useSettingsLoading, useAppSettingsStore } from "@/constants/store";
+import { useColorSchemeDefault } from "@/hooks";
+import { useConfigsLoading, useConfigsStore } from "@/stores/configs";
+import { Stack } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
 
 function SplashScreenHandler() {
-  const isLoadingSettings = useSettingsLoading();
+  const isLoadingSettings = useConfigsLoading();
 
   const loadedFont = useFonts({
     SerifBold: require("@/assets/fonts/serifBold.ttf"),
@@ -40,19 +41,19 @@ function AppContent() {
   useEffect(() => {
     const navBarColor = async () => {
       await NavigationBar.setBackgroundColorAsync(
-        theme === "dark" ? "#0C080C" : "#F7F3F7"
+        theme === "dark" ? "#0C080C" : "#F7F3F7",
       );
 
       await NavigationBar.setButtonStyleAsync(
-        theme === "dark" ? "light" : "dark"
+        theme === "dark" ? "light" : "dark",
       );
     };
     navBarColor();
   }, [theme]);
 
   const loadData = async (db: SQLiteDatabase) => {
-    const store = useAppSettingsStore.getState();
-    await store.loadSettings(db);
+    const store = useConfigsStore.getState();
+    await store.loadConfigs(db);
   };
 
   return (
@@ -67,15 +68,14 @@ function AppContent() {
         assetSource={{ assetId: require("@/assets/database.db") }}
         onInit={loadData}
       >
-        <Drawer />
-        {/* <Stack
+        <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: Styles.Colors[theme].primaryBackground,
+              backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             },
             headerTitleStyle: {
-              fontFamily: Styles.Font.bold,
-              fontSize: Styles.Font.size,
+              fontFamily: STYLES.FONT.BOLD,
+              fontSize: 21,
             },
             contentStyle: {
               backgroundColor: theme === "dark" ? "#0C080C" : "#F7F3F7",
@@ -107,14 +107,8 @@ function AppContent() {
               headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="widget"
-            options={{
-              headerShown: false,
-            }}
-          />
           <Stack.Screen name="+not-found" />
-        </Stack> */}
+        </Stack>
       </SQLiteProvider>
     </ThemeProvider>
   );

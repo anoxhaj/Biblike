@@ -5,9 +5,9 @@ import Animated, { LinearTransition } from "react-native-reanimated";
 
 import Item from "./ReferencesItem";
 import Screen from "../_shared/Screen";
-import * as Styles from "@/constants/Styles";
-import useColorScheme from "@/hooks/useColorScheme";
-import { useCurrentVersion } from "@/constants/store";
+import { STYLES } from "@/constants";
+import { useColorSchemeDefault } from "@/hooks";
+import { useCurrentVersion } from "@/stores/configs";
 import * as vbwc from "@/repositories/VBookWithChapters";
 
 export default function ReferencesGrid({ bookId }: { bookId: number }) {
@@ -15,7 +15,7 @@ export default function ReferencesGrid({ bookId }: { bookId: number }) {
   const [books, setBooks] = useState<vbwc.VBookWithChapters[]>([]);
   const [expandedIndex, setExpandedIndex] = useState<number>(bookId - 1);
   const scrollViewRef = useRef<ScrollView>(null);
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const currentVersion = useCurrentVersion();
 
   const fetchBooks = useCallback(() => {
@@ -58,7 +58,7 @@ export default function ReferencesGrid({ bookId }: { bookId: number }) {
         ref={scrollViewRef}
         style={{
           flex: 1,
-          backgroundColor: Styles.Colors[theme].primaryBackground,
+          backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
         }}
         overScrollMode="never"
         contentContainerStyle={{ paddingVertical: 0 }}

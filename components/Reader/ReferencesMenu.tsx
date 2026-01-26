@@ -2,10 +2,10 @@ import { useRouter, Link } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 
-import * as Helper from "@/helpers/Helper";
-import * as Styles from "@/constants/Styles";
+import { urlBuilder } from "@/utils";
+import { STYLES } from "@/constants";
 import VersionsPicker from "./VersionsPicker";
-import useColorScheme from "@/hooks/useColorScheme";
+import { useColorSchemeDefault } from "@/hooks";
 
 export default function ReferencesMenu({
   versionId,
@@ -23,10 +23,10 @@ export default function ReferencesMenu({
   const router = useRouter();
   const goToChapterScreen = async (newChapterId: number) => {
     if (newChapterId > 0 && newChapterId <= 1189)
-      router.replace(Helper.buildChapterUrl(versionId, newChapterId));
+      router.replace(urlBuilder.chapter(versionId, newChapterId));
   };
 
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   return (
@@ -44,7 +44,7 @@ export default function ReferencesMenu({
                 <Entypo
                   name="chevron-left"
                   size={21}
-                  color={Styles.Colors[theme].primaryText}
+                  color={STYLES.COLORS[theme].TEXT.PRIMARY}
                 />
               )}
             </Text>
@@ -63,7 +63,7 @@ export default function ReferencesMenu({
                 <Entypo
                   name="chevron-right"
                   size={21}
-                  color={Styles.Colors[theme].primaryText}
+                  color={STYLES.COLORS[theme].TEXT.PRIMARY}
                 />
               )}
             </Text>
@@ -82,15 +82,15 @@ function BuildStyleSheet(theme: "dark" | "light") {
       paddingHorizontal: 12,
       height: 70,
       borderTopWidth: 1,
-      borderTopColor: Styles.Colors[theme].secondaryBackground,
+      borderTopColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       flexDirection: "row",
       justifyContent: "space-evenly",
       gap: 6,
       alignItems: "center",
-      backgroundColor: Styles.Colors[theme].primaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
     },
     referencesContainer: {
-      backgroundColor: Styles.Colors[theme].secondaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
@@ -100,9 +100,9 @@ function BuildStyleSheet(theme: "dark" | "light") {
       flex: 1,
     },
     mainLink: {
-      fontSize: Styles.Font.size,
-      fontFamily: Styles.Font.bold,
-      color: Styles.Colors[theme].primaryText,
+      fontSize: 21,
+      fontFamily: STYLES.FONT.BOLD,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     linkContainer: {
       width: 40,

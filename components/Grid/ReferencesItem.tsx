@@ -8,10 +8,10 @@ import {
 import { useRouter } from "expo-router";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
-import * as Helper from "@/helpers/Helper";
-import * as Styles from "@/constants/Styles";
-import useColorScheme from "@/hooks/useColorScheme";
-import { useCurrentVersion } from "@/constants/store";
+import { urlBuilder } from "@/utils";
+import { STYLES } from "@/constants";
+import { useColorSchemeDefault } from "@/hooks";
+import { useCurrentVersion } from "@/stores/configs";
 import * as vbwc from "@/repositories/VBookWithChapters";
 
 export default function ReferencesItem({
@@ -27,7 +27,7 @@ export default function ReferencesItem({
 }) {
   const router = useRouter();
   const currentVersion = useCurrentVersion();
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   const toggleExpand = () => {
@@ -36,7 +36,7 @@ export default function ReferencesItem({
 
   const goToChapterScreen = (chapterId: number) => {
     router.dismissAll();
-    router.replace(Helper.buildChapterUrl(currentVersion, chapterId));
+    router.replace(urlBuilder.chapter(currentVersion, chapterId));
   };
 
   const isExpanded = expandedIndex === index;
@@ -73,7 +73,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       flex: 1,
       paddingVertical: 12,
       paddingHorizontal: 12,
-      backgroundColor: Styles.Colors[theme].primaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       elevation: 3,
     },
     titleContainer: {
@@ -81,9 +81,9 @@ function BuildStyleSheet(theme: "dark" | "light") {
     },
     title: {
       paddingVertical: 12,
-      fontFamily: Styles.Font.regular,
-      fontSize: Styles.Font.size,
-      color: Styles.Colors[theme].primaryText,
+      fontFamily: STYLES.FONT.REGULAR,
+      fontSize: 21,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     row: {
       flexDirection: "row",
@@ -92,7 +92,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       gap: 12,
     },
     square: {
-      backgroundColor: Styles.Colors[theme].secondaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 8,
@@ -100,9 +100,9 @@ function BuildStyleSheet(theme: "dark" | "light") {
       height: responsiveWidth,
     },
     content: {
-      fontFamily: Styles.Font.regular,
+      fontFamily: STYLES.FONT.REGULAR,
       fontSize: 14,
-      color: Styles.Colors[theme].primaryText,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
   });
 }

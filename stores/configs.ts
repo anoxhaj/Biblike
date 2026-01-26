@@ -4,33 +4,33 @@ import { SQLiteDatabase } from "expo-sqlite";
 import * as c from "@/repositories/Configs";
 import * as vvwl from "@/repositories/VVersionsWithLanguage";
 
-export interface AppConfig {
+export interface Config {
   key: string;
   value: number;
 }
 
-export interface AppConfigs {
-  LANGUAGE: AppConfig;
-  VERSION: AppConfig;
-  CHAPTER: AppConfig;
-  VERSE: AppConfig;
+export interface Configs {
+  LANGUAGE: Config;
+  VERSION: Config;
+  CHAPTER: Config;
+  VERSE: Config;
 }
 
-export interface AppSettingsState {
-  configs: AppConfigs;
+export interface ConfigsState {
+  configs: Configs;
   versions: vvwl.VVersionsWithLanguage[];
   isLoaded: boolean;
   isLoading: boolean;
 }
 
-export interface AppSettingsActions {
+export interface ConfigsActions {
   updateConfig: (
-    key: keyof AppConfigs,
+    key: keyof Configs,
     value: number,
-    db: SQLiteDatabase
+    db: SQLiteDatabase,
   ) => Promise<void>;
 
-  loadSettings: (db: SQLiteDatabase) => Promise<void>;
+  loadConfigs: (db: SQLiteDatabase) => Promise<void>;
 
   getVersions: () => vvwl.VVersionsWithLanguage[];
   getCurrentVersion: () => number;
@@ -41,31 +41,29 @@ export interface AppSettingsActions {
   setLoading: (loading: boolean) => void;
 }
 
-export interface AppSettingsStore
-  extends AppSettingsState,
-    AppSettingsActions {}
+export interface ConfigsStore extends ConfigsState, ConfigsActions {}
 
-export const initialConfigs: AppConfigs = {
+export const initialConfigs: Configs = {
   LANGUAGE: { key: "LANGUAGE", value: 2 },
   VERSION: { key: "VERSION", value: 1 },
   CHAPTER: { key: "CHAPTER", value: 1 },
   VERSE: { key: "VERSE", value: 1 },
 };
 
-const initialState: AppSettingsState = {
+const initialState: ConfigsState = {
   configs: initialConfigs,
   versions: [],
   isLoaded: false,
   isLoading: false,
 };
 
-export const useAppSettingsStore = create<AppSettingsStore>((set, get) => ({
+export const useConfigsStore = create<ConfigsStore>((set, get) => ({
   ...initialState,
 
   updateConfig: async (
-    key: keyof AppConfigs,
+    key: keyof Configs,
     value: number,
-    db: SQLiteDatabase
+    db: SQLiteDatabase,
   ) => {
     try {
       await c.UpdateAsync(db, { key, value: value.toString() });
@@ -82,7 +80,7 @@ export const useAppSettingsStore = create<AppSettingsStore>((set, get) => ({
     }
   },
 
-  loadSettings: async (db: SQLiteDatabase) => {
+  loadConfigs: async (db: SQLiteDatabase) => {
     try {
       set((state) => ({ ...state, isLoading: true }));
 
@@ -96,7 +94,7 @@ export const useAppSettingsStore = create<AppSettingsStore>((set, get) => ({
       configsResult.forEach((config) => {
         const { key, value } = config;
         if (key in newConfigs) {
-          newConfigs[key as keyof AppConfigs].value = parseInt(value);
+          newConfigs[key as keyof Configs].value = parseInt(value);
         }
       });
 
@@ -107,7 +105,7 @@ export const useAppSettingsStore = create<AppSettingsStore>((set, get) => ({
         isLoading: false,
       });
     } catch (error) {
-      console.error("Failed to load app settings:", error);
+      console.error("Failed to load  Configs:", error);
       set((state) => ({ ...state, isLoading: false }));
     }
   },
@@ -121,22 +119,20 @@ export const useAppSettingsStore = create<AppSettingsStore>((set, get) => ({
   setLoading: (loading: boolean) => set({ isLoading: loading }),
 }));
 
-export const useAppConfigs = () =>
-  useAppSettingsStore((state) => state.configs);
-export const useAppVersions = () =>
-  useAppSettingsStore((state) => state.versions);
+export const useConfigs = () => useConfigsStore((state) => state.configs);
+export const useVersions = () => useConfigsStore((state) => state.versions);
 export const useCurrentVersion = () =>
-  useAppSettingsStore((state) => state.configs.VERSION.value);
+  useConfigsStore((state) => state.configs.VERSION.value);
 export const useCurrentChapter = () =>
-  useAppSettingsStore((state) => state.configs.CHAPTER.value);
+  useConfigsStore((state) => state.configs.CHAPTER.value);
 export const useCurrentLanguage = () =>
-  useAppSettingsStore((state) => state.configs.LANGUAGE.value);
+  useConfigsStore((state) => state.configs.LANGUAGE.value);
 export const useCurrentVerse = () =>
-  useAppSettingsStore((state) => state.configs.VERSE.value);
-export const useSettingsLoading = () =>
-  useAppSettingsStore((state) => state.isLoading);
+  useConfigsStore((state) => state.configs.VERSE.value);
+export const useConfigsLoading = () =>
+  useConfigsStore((state) => state.isLoading);
 
 export const useUpdateConfig = () =>
-  useAppSettingsStore((state) => state.updateConfig);
-export const useLoadSettings = () =>
-  useAppSettingsStore((state) => state.loadSettings);
+  useConfigsStore((state) => state.updateConfig);
+export const useLoadConfigs = () =>
+  useConfigsStore((state) => state.loadConfigs);

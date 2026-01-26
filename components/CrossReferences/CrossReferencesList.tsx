@@ -5,9 +5,9 @@ import { useSQLiteContext } from "expo-sqlite";
 import Verse from "../_shared/Verse";
 import Loader from "../_shared/Loader";
 import Screen from "../_shared/Screen";
-import * as Styles from "@/constants/Styles";
-import useColorScheme from "@/hooks/useColorScheme";
-import { useCurrentVersion } from "@/constants/store";
+import { STYLES } from "@/constants";
+import { useColorSchemeDefault } from "@/hooks";
+import { useCurrentVersion } from "@/stores/configs";
 import * as vcr from "@/repositories/VCrossReferences";
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
@@ -52,7 +52,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
     </View>
   );
 
-  const theme = useColorScheme();
+  const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   return (
@@ -61,7 +61,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
         crosses.length > 0 ? (
           <FlatList<vcr.VCrossReferences>
             contentContainerStyle={{
-              backgroundColor: Styles.Colors[theme].primaryBackground,
+              backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             }}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
@@ -74,7 +74,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
           <View style={styles.loaderView}>
             <Text
               style={{
-                color: Styles.Colors[theme].primaryText,
+                color: STYLES.COLORS[theme].TEXT.PRIMARY,
               }}
             >
               No Cross References For This Verse
@@ -93,18 +93,18 @@ function BuildStyleSheet(theme: "dark" | "light") {
     referenceContainer: {
       marginLeft: 30,
       marginVertical: 30,
-      borderLeftColor: Styles.Colors[theme].secondaryBackground,
+      borderLeftColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       borderLeftWidth: 3,
       borderStyle: "solid",
     },
     referenceTitle: {
       textAlign: "center",
-      fontFamily: Styles.Font.bold,
-      fontSize: Styles.Font.size,
-      color: Styles.Colors[theme].primaryText,
+      fontFamily: STYLES.FONT.BOLD,
+      fontSize: 21,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     loaderView: {
-      backgroundColor: Styles.Colors[theme].primaryBackground,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
