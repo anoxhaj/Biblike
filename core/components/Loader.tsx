@@ -1,7 +1,7 @@
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 
-import { STYLES } from "@/constants";
-import { useColorSchemeDefault } from "@/hooks";
+import { STYLES } from "@/core/constants";
+import { useColorSchemeDefault } from "@/core/hooks";
 
 export default function Loader() {
   const theme = useColorSchemeDefault();

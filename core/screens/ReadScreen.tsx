@@ -12,15 +12,15 @@ import { useSQLiteContext } from "expo-sqlite";
 import { StyleSheet, Text } from "react-native";
 import { useState, useEffect, useCallback } from "react";
 
-import Verse from "../_shared/Verse";
-import Loader from "../_shared/Loader";
-import Screen from "../_shared/Screen";
-import { urlBuilder } from "@/utils";
-import { STYLES } from "@/constants";
-import ReferencesMenu from "./ReferencesMenu";
-import { useColorSchemeDefault } from "@/hooks";
-import { useUpdateConfig } from "@/stores/configs";
-import * as vcwv from "@/repositories/VChapterWithVerses";
+import Verse from "@/core/components/Verse";
+import Loader from "@/core/components/Loader";
+import Screen from "@/core/components/Screen";
+import { urlBuilder } from "@/core/utils";
+import { STYLES } from "@/core/constants";
+import ReferencesMenu from "@/core/components/ReferencesMenu";
+import { useColorSchemeDefault } from "@/core/hooks";
+import { useUpdateConfig } from "@/core/stores/configs";
+import * as vcwv from "@/core/repositories/VChapterWithVerses";
 
 export default function Reader({
   versionId,

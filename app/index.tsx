@@ -1,7 +1,7 @@
 import { useRouter, useFocusEffect } from "expo-router";
 
-import { urlBuilder } from "@/utils";
-import { useCurrentVersion, useCurrentChapter } from "@/stores/configs";
+import { urlBuilder } from "@/core/utils";
+import { useCurrentVersion, useCurrentChapter } from "@/core/stores/configs";
 
 export default function HomeScreen() {
   const router = useRouter();

@@ -2,10 +2,10 @@ import { useRouter, Link } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 
-import { urlBuilder } from "@/utils";
-import { STYLES } from "@/constants";
+import { urlBuilder } from "@/core/utils";
+import { STYLES } from "@/core/constants";
 import VersionsPicker from "./VersionsPicker";
-import { useColorSchemeDefault } from "@/hooks";
+import { useColorSchemeDefault } from "@/core/hooks";
 
 export default function ReferencesMenu({
   versionId,

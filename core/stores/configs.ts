@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { SQLiteDatabase } from "expo-sqlite";
 
-import * as c from "@/repositories/Configs";
-import * as vvwl from "@/repositories/VVersionsWithLanguage";
+import * as c from "@/core/repositories/Configs";
+import * as vvwl from "@/core/repositories/VVersionsWithLanguage";
 
 export interface Config {
   key: string;

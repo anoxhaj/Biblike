@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { FlatList, Text, View, StyleSheet } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 
-import Verse from "../_shared/Verse";
-import Loader from "../_shared/Loader";
-import Screen from "../_shared/Screen";
-import { STYLES } from "@/constants";
-import { useColorSchemeDefault } from "@/hooks";
-import { useCurrentVersion } from "@/stores/configs";
-import * as vcr from "@/repositories/VCrossReferences";
+import Verse from "@/core/components/Verse";
+import Loader from "@/core/components/Loader";
+import Screen from "@/core/components/Screen";
+import { STYLES } from "@/core/constants";
+import { useColorSchemeDefault } from "@/core/hooks";
+import { useCurrentVersion } from "@/core/stores/configs";
+import * as vcr from "@/core/repositories/VCrossReferences";
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { BackHandler } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import CrossReferences from "@/components/CrossReferences/CrossReferencesList";
+import CrossReferences from "@/core/screens/CrossReferencesScreen";
 
 export default function CrossReferencesScreen() {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function CrossReferencesScreen() {
       () => {
         router.dismissAll();
         return true;
-      }
+      },
     );
 
     return () => {

@@ -8,11 +8,11 @@ import {
 import { useRouter } from "expo-router";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
-import { urlBuilder } from "@/utils";
-import { STYLES } from "@/constants";
-import { useColorSchemeDefault } from "@/hooks";
-import { useCurrentVersion } from "@/stores/configs";
-import * as vbwc from "@/repositories/VBookWithChapters";
+import { urlBuilder } from "@/core/utils";
+import { STYLES } from "@/core/constants";
+import { useColorSchemeDefault } from "@/core/hooks";
+import { useCurrentVersion } from "@/core/stores/configs";
+import * as vbwc from "@/core/repositories/VBookWithChapters";
 
 export default function ReferencesItem({
   index,

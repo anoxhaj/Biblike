@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { BackHandler } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import ReferencesGrid from "@/components/Grid/ReferencesGrid";
+import References from "@/core/screens/ReferencesScreen";
 
 export default function ReferencesScreen() {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function ReferencesScreen() {
       () => {
         router.dismissAll();
         return true;
-      }
+      },
     );
 
     return () => {
@@ -24,5 +24,5 @@ export default function ReferencesScreen() {
   const { bookId } = useLocalSearchParams();
   const bookN = Number(bookId);
 
-  return <ReferencesGrid bookId={bookN} />;
+  return <References bookId={bookN} />;
 }

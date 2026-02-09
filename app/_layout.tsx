@@ -9,10 +9,10 @@ import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import * as NavigationBar from "expo-navigation-bar";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
-import { STYLES } from "@/constants";
+import { STYLES } from "@/core/constants";
 
-import { useColorSchemeDefault } from "@/hooks";
-import { useConfigsLoading, useConfigsStore } from "@/stores/configs";
+import { useColorSchemeDefault } from "@/core/hooks";
+import { useConfigsLoading, useConfigsStore } from "@/core/stores/configs";
 import { Stack } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();

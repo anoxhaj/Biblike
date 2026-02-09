@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { BackHandler } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
-import Reader from "@/components/Reader/Reader";
+import ReadScreen from "@/core/screens/ReadScreen";
 
-export default function ReadScreen() {
+export default function Screen() {
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
         return true;
-      }
+      },
     );
 
     return () => {
@@ -22,5 +22,5 @@ export default function ReadScreen() {
   const chapterN = Number(chapterId);
   const versionN = Number(versionId);
 
-  return <Reader versionId={versionN} chapterId={chapterN}></Reader>;
+  return <ReadScreen versionId={versionN} chapterId={chapterN} />;
 }

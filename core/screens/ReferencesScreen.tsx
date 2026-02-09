@@ -1,14 +1,13 @@
 import { ScrollView } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect, useCallback, useRef } from "react";
-import Animated, { LinearTransition } from "react-native-reanimated";
 
-import Item from "./ReferencesItem";
-import Screen from "../_shared/Screen";
-import { STYLES } from "@/constants";
-import { useColorSchemeDefault } from "@/hooks";
-import { useCurrentVersion } from "@/stores/configs";
-import * as vbwc from "@/repositories/VBookWithChapters";
+import Item from "@/core/components/ReferencesItem";
+import Screen from "@/core/components/Screen";
+import { STYLES } from "@/core/constants";
+import { useColorSchemeDefault } from "@/core/hooks";
+import { useCurrentVersion } from "@/core/stores/configs";
+import * as vbwc from "@/core/repositories/VBookWithChapters";
 
 export default function ReferencesGrid({ bookId }: { bookId: number }) {
   const db = useSQLiteContext();
@@ -65,17 +64,13 @@ export default function ReferencesGrid({ bookId }: { bookId: number }) {
         showsVerticalScrollIndicator={false}
       >
         {books.map((item, index) => (
-          <Animated.View
+          <Item
             key={index.toString()}
-            layout={LinearTransition.springify()}
-          >
-            <Item
-              index={index}
-              item={item}
-              expandedIndex={expandedIndex}
-              onExpansion={onExpansionHandler}
-            />
-          </Animated.View>
+            index={index}
+            item={item}
+            expandedIndex={expandedIndex}
+            onExpansion={onExpansionHandler}
+          />
         ))}
       </ScrollView>
     </Screen>

@@ -15,10 +15,10 @@ import {
   useUpdateConfig,
   useCurrentVersion,
   useVersions,
-} from "@/stores/configs";
-import { urlBuilder } from "@/utils";
-import { STYLES } from "@/constants";
-import { useColorSchemeDefault } from "@/hooks";
+} from "@/core/stores/configs";
+import { urlBuilder } from "@/core/utils";
+import { STYLES } from "@/core/constants";
+import { useColorSchemeDefault } from "@/core/hooks";
 
 export default function VersionsPicker({ chapterId }: { chapterId: number }) {
   const router = useRouter();
