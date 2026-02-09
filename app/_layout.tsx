@@ -40,10 +40,6 @@ function AppContent() {
 
   useEffect(() => {
     const navBarColor = async () => {
-      await NavigationBar.setBackgroundColorAsync(
-        theme === "dark" ? "#0C080C" : "#F7F3F7",
-      );
-
       await NavigationBar.setButtonStyleAsync(
         theme === "dark" ? "light" : "dark",
       );

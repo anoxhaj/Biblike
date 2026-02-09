@@ -49,20 +49,13 @@ export default function Reader({
     fetchChapter();
   }, [fetchChapter]);
 
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
 
   const [selectedVerseId, setSelectedVerseId] = useState<number | null>(null);
 
   useEffect(() => {
     animateMenu(showMenu);
   }, [showMenu]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowMenu(true);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
 
   const scrollY = useSharedValue(0);
   const menuTranslateY = useSharedValue(300);
