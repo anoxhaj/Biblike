@@ -103,6 +103,12 @@ function AppContent() {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="search"
+            options={{
+              headerTitle: "Search",
+            }}
+          />
           <Stack.Screen name="+not-found" />
         </Stack>
       </SQLiteProvider>

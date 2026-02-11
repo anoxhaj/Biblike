@@ -1,6 +1,7 @@
 import { useRouter, Link } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { View, StyleSheet, Pressable, Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { urlBuilder } from "@/core/utils";
 import { STYLES } from "@/core/constants";
@@ -24,6 +25,10 @@ export default function ReferencesMenu({
   const goToChapterScreen = async (newChapterId: number) => {
     if (newChapterId > 0 && newChapterId <= 1189)
       router.replace(urlBuilder.chapter(versionId, newChapterId));
+  };
+
+  const goToSearchScreen = () => {
+    router.push(urlBuilder.search());
   };
 
   const theme = useColorSchemeDefault();
@@ -69,6 +74,13 @@ export default function ReferencesMenu({
             </Text>
           </Pressable>
         </View>
+        <Pressable style={styles.searchButton} onPress={goToSearchScreen}>
+          <Ionicons
+            name="search"
+            size={24}
+            color={STYLES.COLORS[theme].TEXT.PRIMARY}
+          />
+        </Pressable>
         <VersionsPicker chapterId={chapterId}></VersionsPicker>
       </View>
     </>
@@ -110,6 +122,14 @@ function BuildStyleSheet(theme: "dark" | "light") {
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 6,
+    },
+    searchButton: {
+      width: 50,
+      height: 50,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
+      borderRadius: 25,
+      justifyContent: "center",
+      alignItems: "center",
     },
   });
 }

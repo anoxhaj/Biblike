@@ -5,4 +5,7 @@ export const urlBuilder = {
   crossReference(verseId: number): string {
     return `/crossReferences?verseId=${verseId}`;
   },
+  search(): string {
+    return "/search";
+  },
 };
