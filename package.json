@@ -14,7 +14,6 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@expo/metro-runtime": "~55.0.5",
     "expo": "^55.0.0-preview.10",
-    "expo-blur": "~55.0.5",
     "expo-constants": "~55.0.4",
     "expo-dev-client": "~55.0.5",
     "expo-linking": "~55.0.4",
