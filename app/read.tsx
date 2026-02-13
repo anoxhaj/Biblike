@@ -4,7 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 
 import ReadScreen from '@/core/screens/ReadScreen';
 
-export default function Screen() {
+export default function ReadRoute() {
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       return true;

@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import CrossReferences from '@/core/screens/CrossReferencesScreen';
 
-export default function CrossReferencesScreen() {
+export default function CrossReferencesRoute() {
   const router = useRouter();
 
   useEffect(() => {

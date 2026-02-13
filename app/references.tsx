@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { BackHandler } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import References from '@/core/screens/ReferencesScreen';
+import ReferencesScreen from '@/core/screens/ReferencesScreen';
 
-export default function ReferencesScreen() {
+export default function ReferencesRoute() {
   const router = useRouter();
 
   useEffect(() => {
@@ -21,5 +21,5 @@ export default function ReferencesScreen() {
   const { bookId } = useLocalSearchParams();
   const bookN = Number(bookId);
 
-  return <References bookId={bookN} />;
+  return <ReferencesScreen bookId={bookN} />;
 }

@@ -31,7 +31,7 @@ function SplashScreenHandler() {
   return null;
 }
 
-function AppContent() {
+function AppRouter() {
   const theme = useColorSchemeDefault();
 
   useEffect(() => {
@@ -108,5 +108,5 @@ function AppContent() {
 }
 
 export default function RootLayout() {
-  return <AppContent />;
+  return <AppRouter />;
 }

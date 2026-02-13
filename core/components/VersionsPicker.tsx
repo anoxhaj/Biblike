@@ -101,7 +101,7 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
 }
 
 const WIDTH = 66;
-const HEIGHT = 50;
+const HEIGHT = 40;
 
 function BuildStyleSheet(theme: 'dark' | 'light') {
   const colors = STYLES.COLORS[theme];
@@ -115,6 +115,7 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       justifyContent: 'center',
       alignItems: 'center',
+      elevation: 3,
     },
     circleText: {
       fontSize: 16,

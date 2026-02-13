@@ -12,7 +12,7 @@ export function useHideOnScroll(options?: Options): {
   onLayout: (event: any) => void;
   onContentSizeChange: (_: number, height: number) => void;
 } {
-  const { tolerance = 600, bottomTolerance = 300, scrollUpTolerance = 300 } = options || {};
+  const { tolerance = 600, bottomTolerance = 150, scrollUpTolerance = 300 } = options || {};
 
   const showMenu = useSharedValue(1);
 

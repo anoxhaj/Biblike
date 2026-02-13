@@ -1,12 +1,10 @@
 import { useRouter, Link } from 'expo-router';
 import Entypo from '@expo/vector-icons/Entypo';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 
 import { urlBuilder } from '@/core/utils';
 import { STYLES } from '@/core/constants';
-import VersionsPicker from './VersionsPicker';
 import { useAnimatedMenu, useColorSchemeDefault } from '@/core/hooks';
 import Animated, { SharedValue } from 'react-native-reanimated';
 
@@ -28,20 +26,16 @@ export default function ReferencesMenu({
   const router = useRouter();
   const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
-  const menuAnimatedStyle = useAnimatedMenu(show);
+  const menuAnimatedStyle = useAnimatedMenu(show, 300);
 
   const goToChapterScreen = async (newChapterId: number) => {
     if (newChapterId > 0 && newChapterId <= 1189)
       router.replace(urlBuilder.chapter(versionId, newChapterId));
   };
 
-  const goToSearchScreen = () => {
-    router.push(urlBuilder.search());
-  };
-
   return (
     <Animated.View style={[styles.menu, menuAnimatedStyle]}>
-      <BlurView intensity={100} tint={theme} style={styles.borderContainer}>
+      <View style={styles.borderContainer}>
         <View style={styles.referencesContainer}>
           <Pressable style={styles.linkContainer} onPress={() => goToChapterScreen(chapterId - 1)}>
             <Text>
@@ -65,11 +59,7 @@ export default function ReferencesMenu({
             </Text>
           </Pressable>
         </View>
-        <Pressable style={styles.searchButton} onPress={goToSearchScreen}>
-          <Ionicons name="search" size={24} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
-        </Pressable>
-        <VersionsPicker chapterId={chapterId}></VersionsPicker>
-      </BlurView>
+      </View>
     </Animated.View>
   );
 }
@@ -85,10 +75,8 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
     borderContainer: {
       paddingVertical: 12,
       paddingHorizontal: 12,
-      height: 70,
       flexDirection: 'row',
       justifyContent: 'space-evenly',
-      gap: 6,
       alignItems: 'center',
       overflow: 'hidden',
     },
@@ -98,14 +86,16 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       alignItems: 'center',
       justifyContent: 'space-between',
       borderRadius: 21,
-      padding: 6,
-      height: 50,
+      paddingHorizontal: 6,
+      paddingVertical: 3,
+      height: 40,
       flex: 1,
+      elevation: 3,
     },
     mainLink: {
-      fontSize: 21,
-      fontFamily: STYLES.FONT.BOLD,
+      fontSize: 18,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      fontFamily: STYLES.FONT.BOLD,
     },
     linkContainer: {
       width: 40,
@@ -113,14 +103,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 6,
-    },
-    searchButton: {
-      width: 50,
-      height: 50,
-      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
-      borderRadius: 25,
-      justifyContent: 'center',
-      alignItems: 'center',
     },
   });
 }
