@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "expo-sqlite";
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export interface Configs {
   key: string;
@@ -12,11 +12,8 @@ export async function GetAllAsync(db: SQLiteDatabase): Promise<Configs[]> {
 }
 
 // UPDATE
-export async function UpdateAsync(
-  db: SQLiteDatabase,
-  entity: Configs
-): Promise<Configs> {
-  await db.runAsync("UPDATE configs SET value = $value WHERE key = $key;", {
+export async function UpdateAsync(db: SQLiteDatabase, entity: Configs): Promise<Configs> {
+  await db.runAsync('UPDATE configs SET value = $value WHERE key = $key;', {
     $key: entity.key,
     $value: entity.value,
   });

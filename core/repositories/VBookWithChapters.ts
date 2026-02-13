@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "expo-sqlite";
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export interface VBookWithChapters {
   id: number;
@@ -25,7 +25,7 @@ interface Helper {
 // READ
 export async function GetAllByVersionAsync(
   db: SQLiteDatabase,
-  version_id: number
+  version_id: number,
 ): Promise<VBookWithChapters[]> {
   let data = await db.getAllAsync<Helper>(
     `SELECT
@@ -40,32 +40,29 @@ export async function GetAllByVersionAsync(
       INNER JOIN chapters ON books.id = chapters.book_id
     WHERE
       book_translations.language_id = (SELECT language_id FROM versions WHERE id = $version_id);`,
-    { $version_id: version_id }
+    { $version_id: version_id },
   );
 
-  const result = data.reduce<VBookWithChapters[]>(
-    (acc: VBookWithChapters[], item: Helper) => {
-      let book = acc.find((i) => i.id === item.book_id);
+  const result = data.reduce<VBookWithChapters[]>((acc: VBookWithChapters[], item: Helper) => {
+    let book = acc.find((i) => i.id === item.book_id);
 
-      if (book == undefined) {
-        book = {
-          id: item.book_id,
-          bookCode: item.book_code,
-          bookName: item.book_name,
-          chapters: [],
-        };
-        acc.push(book);
-      }
+    if (book == undefined) {
+      book = {
+        id: item.book_id,
+        bookCode: item.book_code,
+        bookName: item.book_name,
+        chapters: [],
+      };
+      acc.push(book);
+    }
 
-      book?.chapters.push({
-        chapterId: item.chapter_id,
-        chapterNo: item.chapter_no,
-      });
+    book?.chapters.push({
+      chapterId: item.chapter_id,
+      chapterNo: item.chapter_no,
+    });
 
-      return acc;
-    },
-    []
-  );
+    return acc;
+  }, []);
 
   return result;
 }

@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { SQLiteDatabase } from "expo-sqlite";
+import { create } from 'zustand';
+import { SQLiteDatabase } from 'expo-sqlite';
 
-import * as c from "@/core/repositories/Configs";
-import * as vvwl from "@/core/repositories/VVersionsWithLanguage";
+import * as c from '@/core/repositories/Configs';
+import * as vvwl from '@/core/repositories/VVersionsWithLanguage';
 
 export interface Config {
   key: string;
@@ -24,11 +24,7 @@ export interface ConfigsState {
 }
 
 export interface ConfigsActions {
-  updateConfig: (
-    key: keyof Configs,
-    value: number,
-    db: SQLiteDatabase,
-  ) => Promise<void>;
+  updateConfig: (key: keyof Configs, value: number, db: SQLiteDatabase) => Promise<void>;
 
   loadConfigs: (db: SQLiteDatabase) => Promise<void>;
 
@@ -44,10 +40,10 @@ export interface ConfigsActions {
 export interface ConfigsStore extends ConfigsState, ConfigsActions {}
 
 export const initialConfigs: Configs = {
-  LANGUAGE: { key: "LANGUAGE", value: 2 },
-  VERSION: { key: "VERSION", value: 1 },
-  CHAPTER: { key: "CHAPTER", value: 1 },
-  VERSE: { key: "VERSE", value: 1 },
+  LANGUAGE: { key: 'LANGUAGE', value: 2 },
+  VERSION: { key: 'VERSION', value: 1 },
+  CHAPTER: { key: 'CHAPTER', value: 1 },
+  VERSE: { key: 'VERSE', value: 1 },
 };
 
 const initialState: ConfigsState = {
@@ -60,11 +56,7 @@ const initialState: ConfigsState = {
 export const useConfigsStore = create<ConfigsStore>((set, get) => ({
   ...initialState,
 
-  updateConfig: async (
-    key: keyof Configs,
-    value: number,
-    db: SQLiteDatabase,
-  ) => {
+  updateConfig: async (key: keyof Configs, value: number, db: SQLiteDatabase) => {
     try {
       await c.UpdateAsync(db, { key, value: value.toString() });
 
@@ -75,7 +67,7 @@ export const useConfigsStore = create<ConfigsStore>((set, get) => ({
         },
       }));
     } catch (error) {
-      console.error("Failed to update config:", error);
+      console.error('Failed to update config:', error);
       throw error;
     }
   },
@@ -105,7 +97,7 @@ export const useConfigsStore = create<ConfigsStore>((set, get) => ({
         isLoading: false,
       });
     } catch (error) {
-      console.error("Failed to load  Configs:", error);
+      console.error('Failed to load  Configs:', error);
       set((state) => ({ ...state, isLoading: false }));
     }
   },
@@ -121,18 +113,11 @@ export const useConfigsStore = create<ConfigsStore>((set, get) => ({
 
 export const useConfigs = () => useConfigsStore((state) => state.configs);
 export const useVersions = () => useConfigsStore((state) => state.versions);
-export const useCurrentVersion = () =>
-  useConfigsStore((state) => state.configs.VERSION.value);
-export const useCurrentChapter = () =>
-  useConfigsStore((state) => state.configs.CHAPTER.value);
-export const useCurrentLanguage = () =>
-  useConfigsStore((state) => state.configs.LANGUAGE.value);
-export const useCurrentVerse = () =>
-  useConfigsStore((state) => state.configs.VERSE.value);
-export const useConfigsLoading = () =>
-  useConfigsStore((state) => state.isLoading);
+export const useCurrentVersion = () => useConfigsStore((state) => state.configs.VERSION.value);
+export const useCurrentChapter = () => useConfigsStore((state) => state.configs.CHAPTER.value);
+export const useCurrentLanguage = () => useConfigsStore((state) => state.configs.LANGUAGE.value);
+export const useCurrentVerse = () => useConfigsStore((state) => state.configs.VERSE.value);
+export const useConfigsLoading = () => useConfigsStore((state) => state.isLoading);
 
-export const useUpdateConfig = () =>
-  useConfigsStore((state) => state.updateConfig);
-export const useLoadConfigs = () =>
-  useConfigsStore((state) => state.loadConfigs);
+export const useUpdateConfig = () => useConfigsStore((state) => state.updateConfig);
+export const useLoadConfigs = () => useConfigsStore((state) => state.loadConfigs);

@@ -5,30 +5,24 @@ import Animated, {
   withSpring,
   withDelay,
   interpolate,
-} from "react-native-reanimated";
-import { scheduleOnRN } from "react-native-worklets";
-import { useRouter } from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
-import { StyleSheet, Text } from "react-native";
-import { useState, useEffect, useCallback } from "react";
+} from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
+import { useRouter } from 'expo-router';
+import { useSQLiteContext } from 'expo-sqlite';
+import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect, useCallback } from 'react';
 
-import Verse from "@/core/components/Verse";
-import Loader from "@/core/components/Loader";
-import Screen from "@/core/components/Screen";
-import { urlBuilder } from "@/core/utils";
-import { STYLES } from "@/core/constants";
-import ReferencesMenu from "@/core/components/ReferencesMenu";
-import { useColorSchemeDefault } from "@/core/hooks";
-import { useUpdateConfig } from "@/core/stores/configs";
-import * as vcwv from "@/core/repositories/VChapterWithVerses";
+import Verse from '@/core/components/Verse';
+import Loader from '@/core/components/Loader';
+import Screen from '@/core/components/Screen';
+import { urlBuilder } from '@/core/utils';
+import { STYLES } from '@/core/constants';
+import ReferencesMenu from '@/core/components/ReferencesMenu';
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useUpdateConfig } from '@/core/stores/configs';
+import * as vcwv from '@/core/repositories/VChapterWithVerses';
 
-export default function Reader({
-  versionId,
-  chapterId,
-}: {
-  versionId: number;
-  chapterId: number;
-}) {
+export default function Reader({ versionId, chapterId }: { versionId: number; chapterId: number }) {
   const db = useSQLiteContext();
 
   const [chapter, setChapter] = useState<vcwv.VChapterWithVerses>();
@@ -39,7 +33,7 @@ export default function Reader({
     async function fetch() {
       await db.withExclusiveTransactionAsync(async () => {
         setChapter(await vcwv.GetChapterByIdAsync(db, versionId, chapterId));
-        await updateConfig("CHAPTER", chapterId, db);
+        await updateConfig('CHAPTER', chapterId, db);
       });
     }
     fetch();
@@ -151,8 +145,7 @@ export default function Reader({
       scrollY.value = currentY;
 
       const isNearBottom =
-        scrollY.value >=
-        scrollViewHeight.value - scrollViewLayoutHeight.value - bottomTolerance;
+        scrollY.value >= scrollViewHeight.value - scrollViewLayoutHeight.value - bottomTolerance;
 
       if (!isNearBottom) {
         if (
@@ -213,10 +206,7 @@ export default function Reader({
 
   const menuAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [
-        { translateY: menuTranslateY.value },
-        { scale: menuScale.value },
-      ],
+      transform: [{ translateY: menuTranslateY.value }, { scale: menuScale.value }],
       opacity: menuOpacity.value,
       shadowOpacity: menuShadowOpacity.value,
       shadowRadius: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 8]),
@@ -232,6 +222,18 @@ export default function Reader({
     <Screen>
       {chapter ? (
         <>
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              height: 50,
+              width: 50,
+              backgroundColor: 'red',
+              zIndex: 2,
+            }}
+          ></View>
+
           <Animated.ScrollView
             overScrollMode="never"
             contentContainerStyle={{
@@ -239,12 +241,7 @@ export default function Reader({
               paddingBottom: 60,
               backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             }}
-            style={{
-              position: "absolute",
-              top: 0,
-              width: "100%",
-              height: "100%",
-            }}
+            style={{ flex: 1 }}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
@@ -267,7 +264,7 @@ export default function Reader({
               versionId={versionId}
               chapterId={chapterId}
               bookId={chapter.bookId}
-              bookName={chapter?.bookName ?? ""}
+              bookName={chapter?.bookName ?? ''}
               chapterNumber={chapter?.chapterNumber ?? 0}
             ></ReferencesMenu>
           </Animated.View>
@@ -279,16 +276,16 @@ export default function Reader({
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     bookName: {
-      textAlign: "center",
+      textAlign: 'center',
       fontFamily: STYLES.FONT.BOLD,
       fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     chapterNumber: {
-      textAlign: "center",
+      textAlign: 'center',
       fontFamily: STYLES.FONT.BOLD,
       fontSize: 66,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
@@ -309,7 +306,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     about: {
-      textAlign: "center",
+      textAlign: 'center',
       paddingTop: 120,
       paddingBottom: 30,
       fontFamily: STYLES.FONT.ITALIC,
@@ -317,7 +314,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     menu: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
       left: 0,
       right: 0,

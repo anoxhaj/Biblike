@@ -1,12 +1,13 @@
-import { useRouter, Link } from "expo-router";
-import Entypo from "@expo/vector-icons/Entypo";
-import { View, StyleSheet, Pressable, Text } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { useRouter, Link } from 'expo-router';
+import Entypo from '@expo/vector-icons/Entypo';
+import { View, StyleSheet, Pressable, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 
-import { urlBuilder } from "@/core/utils";
-import { STYLES } from "@/core/constants";
-import VersionsPicker from "./VersionsPicker";
-import { useColorSchemeDefault } from "@/core/hooks";
+import { urlBuilder } from '@/core/utils';
+import { STYLES } from '@/core/constants';
+import VersionsPicker from './VersionsPicker';
+import { useColorSchemeDefault } from '@/core/hooks';
 
 export default function ReferencesMenu({
   versionId,
@@ -36,76 +37,56 @@ export default function ReferencesMenu({
 
   return (
     <>
-      <View style={styles.borderContainer}>
+      <BlurView intensity={100} tint={theme} style={styles.borderContainer}>
         <View style={styles.referencesContainer}>
-          <Pressable
-            style={styles.linkContainer}
-            onPress={() => goToChapterScreen(chapterId - 1)}
-          >
+          <Pressable style={styles.linkContainer} onPress={() => goToChapterScreen(chapterId - 1)}>
             <Text>
               {chapterId == 1 ? (
-                ""
+                ''
               ) : (
-                <Entypo
-                  name="chevron-left"
-                  size={21}
-                  color={STYLES.COLORS[theme].TEXT.PRIMARY}
-                />
+                <Entypo name="chevron-left" size={21} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
               )}
             </Text>
           </Pressable>
           <Link style={styles.mainLink} href={`references?bookId=${bookId}`}>
-            {bookName + " " + chapterNumber}
+            {bookName + ' ' + chapterNumber}
           </Link>
-          <Pressable
-            style={styles.linkContainer}
-            onPress={() => goToChapterScreen(chapterId + 1)}
-          >
+          <Pressable style={styles.linkContainer} onPress={() => goToChapterScreen(chapterId + 1)}>
             <Text>
               {chapterId == 1189 ? (
-                ""
+                ''
               ) : (
-                <Entypo
-                  name="chevron-right"
-                  size={21}
-                  color={STYLES.COLORS[theme].TEXT.PRIMARY}
-                />
+                <Entypo name="chevron-right" size={21} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
               )}
             </Text>
           </Pressable>
         </View>
         <Pressable style={styles.searchButton} onPress={goToSearchScreen}>
-          <Ionicons
-            name="search"
-            size={24}
-            color={STYLES.COLORS[theme].TEXT.PRIMARY}
-          />
+          <Ionicons name="search" size={24} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
         </Pressable>
         <VersionsPicker chapterId={chapterId}></VersionsPicker>
-      </View>
+      </BlurView>
     </>
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     borderContainer: {
       paddingVertical: 12,
       paddingHorizontal: 12,
       height: 70,
-      borderTopWidth: 1,
-      borderTopColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
-      flexDirection: "row",
-      justifyContent: "space-evenly",
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
       gap: 6,
-      alignItems: "center",
-      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
+      alignItems: 'center',
+      overflow: 'hidden',
     },
     referencesContainer: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       borderRadius: 21,
       padding: 6,
       height: 50,
@@ -118,9 +99,9 @@ function BuildStyleSheet(theme: "dark" | "light") {
     },
     linkContainer: {
       width: 40,
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
       borderRadius: 6,
     },
     searchButton: {
@@ -128,8 +109,8 @@ function BuildStyleSheet(theme: "dark" | "light") {
       height: 50,
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       borderRadius: 25,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 }

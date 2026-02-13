@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "expo-sqlite";
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export interface VChapterWithVerses {
   id: number;
@@ -30,7 +30,7 @@ interface Helper {
 export async function GetChapterByIdAsync(
   db: SQLiteDatabase,
   version_id: number,
-  chapter_id: number
+  chapter_id: number,
 ): Promise<VChapterWithVerses> {
   let data = await db.getAllAsync<Helper>(
     `SELECT
@@ -51,7 +51,7 @@ export async function GetChapterByIdAsync(
       verse_texts.version_id = $version_id
       AND verses.chapter_id = $chapter_id
       AND chapters.id = $chapter_id`,
-    { $version_id: version_id, $chapter_id: chapter_id }
+    { $version_id: version_id, $chapter_id: chapter_id },
   );
 
   const chapter: VChapterWithVerses = {
@@ -62,23 +62,20 @@ export async function GetChapterByIdAsync(
     verses: [],
   };
 
-  const result = data.reduce<VChapterWithVerses>(
-    (acc: VChapterWithVerses, item: Helper) => {
-      let verse = acc.verses.find((i) => i.id === item.verse_id);
+  const result = data.reduce<VChapterWithVerses>((acc: VChapterWithVerses, item: Helper) => {
+    let verse = acc.verses.find((i) => i.id === item.verse_id);
 
-      if (verse == undefined) {
-        verse = {
-          id: item.verse_id,
-          number: item.verse_number,
-          text: item.verse_text,
-        };
-        acc.verses.push(verse);
-      }
+    if (verse == undefined) {
+      verse = {
+        id: item.verse_id,
+        number: item.verse_number,
+        text: item.verse_text,
+      };
+      acc.verses.push(verse);
+    }
 
-      return acc;
-    },
-    chapter
-  );
+    return acc;
+  }, chapter);
 
   return result;
 }

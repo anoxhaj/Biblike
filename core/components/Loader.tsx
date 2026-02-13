@@ -1,7 +1,7 @@
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
 
 export default function Loader() {
   const theme = useColorSchemeDefault();
@@ -18,23 +18,23 @@ export default function Loader() {
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     loaderView: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      width: "100%",
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%',
     },
     loader: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      width: "100%",
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%',
     },
   });
 }

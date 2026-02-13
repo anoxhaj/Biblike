@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "expo-sqlite";
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export interface VCrossReferences {
   id: number;
@@ -37,7 +37,7 @@ interface Helper {
 export async function GetByVerseIdAsync(
   db: SQLiteDatabase,
   version_id: number,
-  verse_id: number
+  verse_id: number,
 ): Promise<VCrossReferences[]> {
   let data = await db.getAllAsync<Helper>(
     `SELECT
@@ -60,55 +60,50 @@ FROM
 WHERE 
     verse_cross_references.verse_id = $verse_id
     AND verse_texts.version_id = $version_id`,
-    { $version_id: version_id, $verse_id: verse_id }
+    { $version_id: version_id, $verse_id: verse_id },
   );
 
-  const result = data.reduce<VCrossReferences[]>(
-    (acc: VCrossReferences[], item: Helper) => {
-      let cross = acc.find((i) => i.id === item.id);
+  const result = data.reduce<VCrossReferences[]>((acc: VCrossReferences[], item: Helper) => {
+    let cross = acc.find((i) => i.id === item.id);
 
-      if (cross == undefined) {
-        cross = {
-          id: item.id,
-          from: item.from,
-          to: item.to,
-          bookName: item.book_name,
-          chapterNumber: item.chapter_number,
-          verseNumberFrom: item.verse_number,
-          verseNumberTo: item.verse_number,
-          verses: [
-            {
-              verseId: item.verse_id,
-              verseText: item.verse_text,
-              verseNumber: item.verse_number,
-            },
-          ],
-          votes: item.votes,
-        };
-        acc.push(cross);
-      } else {
-        let index = acc.indexOf(cross);
+    if (cross == undefined) {
+      cross = {
+        id: item.id,
+        from: item.from,
+        to: item.to,
+        bookName: item.book_name,
+        chapterNumber: item.chapter_number,
+        verseNumberFrom: item.verse_number,
+        verseNumberTo: item.verse_number,
+        verses: [
+          {
+            verseId: item.verse_id,
+            verseText: item.verse_text,
+            verseNumber: item.verse_number,
+          },
+        ],
+        votes: item.votes,
+      };
+      acc.push(cross);
+    } else {
+      let index = acc.indexOf(cross);
 
-        if (cross.verseNumberFrom > item.verse_number)
-          cross.verseNumberFrom = item.verse_number;
-        else if (cross.verseNumberTo < item.verse_number)
-          cross.verseNumberTo = item.verse_number;
+      if (cross.verseNumberFrom > item.verse_number) cross.verseNumberFrom = item.verse_number;
+      else if (cross.verseNumberTo < item.verse_number) cross.verseNumberTo = item.verse_number;
 
-        cross.verses.push({
-          verseId: item.verse_id,
-          verseNumber: item.verse_number,
-          verseText: item.verse_text,
-        });
+      cross.verses.push({
+        verseId: item.verse_id,
+        verseNumber: item.verse_number,
+        verseText: item.verse_text,
+      });
 
-        cross.verses.sort((a, b) => a.verseNumber - b.verseNumber);
+      cross.verses.sort((a, b) => a.verseNumber - b.verseNumber);
 
-        acc[index] = cross;
-      }
+      acc[index] = cross;
+    }
 
-      return acc;
-    },
-    []
-  );
+    return acc;
+  }, []);
 
   result.sort((a, b) => b.votes - a.votes);
 

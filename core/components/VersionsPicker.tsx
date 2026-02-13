@@ -6,19 +6,15 @@ import {
   Modal,
   ScrollView,
   Pressable,
-} from "react-native";
-import { useState } from "react";
-import { useRouter } from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
+} from 'react-native';
+import { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useSQLiteContext } from 'expo-sqlite';
 
-import {
-  useUpdateConfig,
-  useCurrentVersion,
-  useVersions,
-} from "@/core/stores/configs";
-import { urlBuilder } from "@/core/utils";
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
+import { useUpdateConfig, useCurrentVersion, useVersions } from '@/core/stores/configs';
+import { urlBuilder } from '@/core/utils';
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
 
 export default function VersionsPicker({ chapterId }: { chapterId: number }) {
   const router = useRouter();
@@ -37,22 +33,19 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
       return;
     }
 
-    await updateConfig("VERSION", Number(value), db);
+    await updateConfig('VERSION', Number(value), db);
     setModalVisible(false);
     router.replace(urlBuilder.chapter(value, chapterId));
   };
 
   const getAbbreviation = (id: number | null) => {
     const found = versions.find((v) => v.id === id);
-    return found?.abbreviation || "Select Version";
+    return found?.abbreviation || 'Select Version';
   };
 
   return (
     <>
-      <TouchableOpacity
-        style={styles.circleWrapper}
-        onPress={() => setModalVisible(true)}
-      >
+      <TouchableOpacity style={styles.circleWrapper} onPress={() => setModalVisible(true)}>
         <Text style={styles.circleText}>{getAbbreviation(currentVersion)}</Text>
       </TouchableOpacity>
 
@@ -62,10 +55,7 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setModalVisible(false)}
-        >
+        <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Select Version</Text>
@@ -87,8 +77,7 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
                   <Text
                     style={[
                       styles.versionText,
-                      version.id === currentVersion &&
-                        styles.versionTextSelected,
+                      version.id === currentVersion && styles.versionTextSelected,
                     ]}
                   >
                     {version.name}
@@ -96,8 +85,7 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
                   <Text
                     style={[
                       styles.versionSubtext,
-                      version.id === currentVersion &&
-                        styles.versionSubtextSelected,
+                      version.id === currentVersion && styles.versionSubtextSelected,
                     ]}
                   >
                     {version.abbreviation} • {version.year}
@@ -115,18 +103,18 @@ export default function VersionsPicker({ chapterId }: { chapterId: number }) {
 const WIDTH = 66;
 const HEIGHT = 50;
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   const colors = STYLES.COLORS[theme];
 
   return StyleSheet.create({
     circleWrapper: {
-      position: "relative",
+      position: 'relative',
       width: WIDTH,
       height: HEIGHT,
       borderRadius: 21,
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     circleText: {
       fontSize: 16,
@@ -135,21 +123,21 @@ function BuildStyleSheet(theme: "dark" | "light") {
     },
     modalOverlay: {
       flex: 1,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      justifyContent: "center",
-      alignItems: "center",
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     modalContent: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       borderRadius: 16,
-      width: "85%",
-      maxHeight: "70%",
-      overflow: "hidden",
+      width: '85%',
+      maxHeight: '70%',
+      overflow: 'hidden',
     },
     modalHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       padding: 20,
       borderBottomWidth: 1,
       borderBottomColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
@@ -164,7 +152,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
     scrollView: {
-      maxHeight: "100%",
+      maxHeight: '100%',
     },
     versionItem: {
       padding: 16,

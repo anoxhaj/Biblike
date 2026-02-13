@@ -1,19 +1,15 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { useEffect } from "react";
-import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
-import * as NavigationBar from "expo-navigation-bar";
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
-import { STYLES } from "@/core/constants";
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import * as NavigationBar from 'expo-navigation-bar';
+import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
+import { STYLES } from '@/core/constants';
 
-import { useColorSchemeDefault } from "@/core/hooks";
-import { useConfigsLoading, useConfigsStore } from "@/core/stores/configs";
-import { Stack } from "expo-router";
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useConfigsLoading, useConfigsStore } from '@/core/stores/configs';
+import { Stack } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,9 +17,9 @@ function SplashScreenHandler() {
   const isLoadingSettings = useConfigsLoading();
 
   const loadedFont = useFonts({
-    SerifBold: require("@/assets/fonts/serifBold.ttf"),
-    SerifItalic: require("@/assets/fonts/serifItalic.ttf"),
-    SerifRegular: require("@/assets/fonts/serifRegular.ttf"),
+    SerifBold: require('@/assets/fonts/serifBold.ttf'),
+    SerifItalic: require('@/assets/fonts/serifItalic.ttf'),
+    SerifRegular: require('@/assets/fonts/serifRegular.ttf'),
   });
 
   useEffect(() => {
@@ -40,9 +36,7 @@ function AppContent() {
 
   useEffect(() => {
     const navBarColor = async () => {
-      await NavigationBar.setButtonStyleAsync(
-        theme === "dark" ? "light" : "dark",
-      );
+      await NavigationBar.setButtonStyleAsync(theme === 'dark' ? 'light' : 'dark');
     };
     navBarColor();
   }, [theme]);
@@ -53,15 +47,12 @@ function AppContent() {
   };
 
   return (
-    <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
-      <StatusBar
-        style="auto"
-        backgroundColor={theme === "dark" ? "#0C080C" : "#F7F3F7"}
-      />
+    <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
+      <StatusBar style="auto" backgroundColor={STYLES.COLORS[theme].BACKGROUND.PRIMARY} />
       <SplashScreenHandler />
       <SQLiteProvider
         databaseName="database.db"
-        assetSource={{ assetId: require("@/assets/database.db") }}
+        assetSource={{ assetId: require('@/assets/database.db') }}
         onInit={loadData}
       >
         <Stack
@@ -74,9 +65,9 @@ function AppContent() {
               fontSize: 21,
             },
             contentStyle: {
-              backgroundColor: theme === "dark" ? "#0C080C" : "#F7F3F7",
+              backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             },
-            animation: "none",
+            animation: 'fade',
           }}
         >
           <Stack.Screen
@@ -88,13 +79,13 @@ function AppContent() {
           <Stack.Screen
             name="references"
             options={{
-              headerTitle: "References",
+              headerTitle: 'References',
             }}
           />
           <Stack.Screen
             name="crossReferences"
             options={{
-              headerTitle: "Cross References",
+              headerTitle: 'Cross References',
             }}
           />
           <Stack.Screen
@@ -106,7 +97,7 @@ function AppContent() {
           <Stack.Screen
             name="search"
             options={{
-              headerTitle: "Search",
+              headerTitle: 'Search',
             }}
           />
           <Stack.Screen name="+not-found" />

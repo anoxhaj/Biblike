@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
-import { useSQLiteContext } from "expo-sqlite";
+import { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
 
-import Screen from "@/core/components/Screen";
-import Loader from "@/core/components/Loader";
-import SearchResults from "@/core/components/SearchResults";
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
-import { useCurrentVersion } from "@/core/stores/configs";
-import * as vsr from "@/core/repositories/VSearchResults";
+import Screen from '@/core/components/Screen';
+import Loader from '@/core/components/Loader';
+import SearchResults from '@/core/components/SearchResults';
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useCurrentVersion } from '@/core/stores/configs';
+import * as vsr from '@/core/repositories/VSearchResults';
 
 export default function SearchScreen() {
   const db = useSQLiteContext();
@@ -16,7 +16,7 @@ export default function SearchScreen() {
   const styles = BuildStyleSheet(theme);
   const currentVersion = useCurrentVersion();
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState<vsr.VSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -34,15 +34,11 @@ export default function SearchScreen() {
 
       try {
         await db.withExclusiveTransactionAsync(async () => {
-          const searchResults = await vsr.SearchVersesByTextAsync(
-            db,
-            currentVersion,
-            query.trim(),
-          );
+          const searchResults = await vsr.SearchVersesByTextAsync(db, currentVersion, query.trim());
           setResults(searchResults);
         });
       } catch (error) {
-        console.error("Search error:", error);
+        console.error('Search error:', error);
         setResults([]);
       } finally {
         setIsLoading(false);
@@ -89,7 +85,7 @@ export default function SearchScreen() {
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -110,14 +106,14 @@ function BuildStyleSheet(theme: "dark" | "light") {
     },
     instructionContainer: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       paddingHorizontal: 40,
     },
     instructionText: {
       fontFamily: STYLES.FONT.ITALIC,
       fontSize: 18,
-      textAlign: "center",
+      textAlign: 'center',
       color: STYLES.COLORS[theme].TEXT.SECONDARY,
       lineHeight: 28,
     },

@@ -1,18 +1,12 @@
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-  Dimensions,
-} from "react-native";
-import { useRouter } from "expo-router";
-import Animated, { LinearTransition } from "react-native-reanimated";
+import { Text, TouchableOpacity, StyleSheet, Pressable, Dimensions, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
-import { urlBuilder } from "@/core/utils";
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
-import { useCurrentVersion } from "@/core/stores/configs";
-import * as vbwc from "@/core/repositories/VBookWithChapters";
+import { urlBuilder } from '@/core/utils';
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useCurrentVersion } from '@/core/stores/configs';
+import * as vbwc from '@/core/repositories/VBookWithChapters';
 
 export default function ReferencesItem({
   index,
@@ -43,14 +37,11 @@ export default function ReferencesItem({
   const chapters = isExpanded ? item.chapters : [];
 
   return (
-    <Animated.View
-      style={styles.expandable}
-      layout={LinearTransition.springify()}
-    >
+    <Animated.View style={styles.expandable} layout={LinearTransition.build()}>
       <TouchableOpacity onPress={toggleExpand} style={styles.titleContainer}>
         <Text style={styles.title}>{item.bookName}</Text>
       </TouchableOpacity>
-      <Animated.View style={styles.row} layout={LinearTransition.springify()}>
+      <View style={styles.row}>
         {chapters.map((chapter) => (
           <Pressable
             key={chapter.chapterId}
@@ -60,13 +51,13 @@ export default function ReferencesItem({
             <Text style={styles.content}>{chapter.chapterNo}</Text>
           </Pressable>
         ))}
-      </Animated.View>
+      </View>
     </Animated.View>
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
-  const { width } = Dimensions.get("window");
+function BuildStyleSheet(theme: 'dark' | 'light') {
+  const { width } = Dimensions.get('window');
   const responsiveWidth = (width - 86) / 6;
   return StyleSheet.create({
     expandable: {
@@ -77,7 +68,7 @@ function BuildStyleSheet(theme: "dark" | "light") {
       elevation: 3,
     },
     titleContainer: {
-      overflow: "hidden",
+      overflow: 'hidden',
     },
     title: {
       paddingVertical: 12,
@@ -86,15 +77,15 @@ function BuildStyleSheet(theme: "dark" | "light") {
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
     row: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      justifyContent: "flex-start",
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-start',
       gap: 12,
     },
     square: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       borderRadius: 8,
       width: responsiveWidth,
       height: responsiveWidth,

@@ -1,11 +1,11 @@
-import { View, StyleSheet, Text, FlatList, Pressable } from "react-native";
-import { useRouter } from "expo-router";
+import { View, StyleSheet, Text, FlatList, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
-import { urlBuilder } from "@/core/utils";
-import { useCurrentVersion } from "@/core/stores/configs";
-import * as vsr from "@/core/repositories/VSearchResults";
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
+import { urlBuilder } from '@/core/utils';
+import { useCurrentVersion } from '@/core/stores/configs';
+import * as vsr from '@/core/repositories/VSearchResults';
 
 export default function SearchResults({
   results,
@@ -56,7 +56,7 @@ export default function SearchResults({
 }
 
 function normalize(str: string) {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 function extractFtsTokens(query: string): string[] {
@@ -64,7 +64,7 @@ function extractFtsTokens(query: string): string[] {
     .toLowerCase()
     .trim()
     .split(/\s+/)
-    .map((t) => t.replace(/["*]/g, "")) // remove quotes & prefix operator
+    .map((t) => t.replace(/["*]/g, '')) // remove quotes & prefix operator
     .filter((t) => t.length > 0);
 }
 
@@ -89,7 +89,7 @@ function HighlightText({
   const normalizedTokens = tokens.map(normalize);
 
   // Match ANY token
-  const regex = new RegExp(`(${normalizedTokens.join("|")})`, "gi");
+  const regex = new RegExp(`(${normalizedTokens.join('|')})`, 'gi');
 
   const parts: { text: string; highlighted: boolean }[] = [];
   let lastIndex = 0;
@@ -129,7 +129,7 @@ function HighlightText({
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     container: {
       flex: 1,
@@ -162,8 +162,8 @@ function BuildStyleSheet(theme: "dark" | "light") {
     },
     emptyContainer: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       paddingTop: 100,
     },
     emptyText: {
@@ -172,8 +172,8 @@ function BuildStyleSheet(theme: "dark" | "light") {
       color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
     highlight: {
-      backgroundColor: "yellow", //STYLES.COLORS[theme].ACCENT,
-      color: "#000", //STYLES.COLORS[theme].TEXT.ON_ACCENT,
+      backgroundColor: 'yellow', //STYLES.COLORS[theme].ACCENT,
+      color: '#000', //STYLES.COLORS[theme].TEXT.ON_ACCENT,
       fontFamily: STYLES.FONT.BOLD,
     },
   });

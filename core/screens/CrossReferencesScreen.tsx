@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
-import { FlatList, Text, View, StyleSheet } from "react-native";
-import { useSQLiteContext } from "expo-sqlite";
+import { useState, useEffect, useCallback } from 'react';
+import { FlatList, Text, View, StyleSheet } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
 
-import Verse from "@/core/components/Verse";
-import Loader from "@/core/components/Loader";
-import Screen from "@/core/components/Screen";
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
-import { useCurrentVersion } from "@/core/stores/configs";
-import * as vcr from "@/core/repositories/VCrossReferences";
+import Verse from '@/core/components/Verse';
+import Loader from '@/core/components/Loader';
+import Screen from '@/core/components/Screen';
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useCurrentVersion } from '@/core/stores/configs';
+import * as vcr from '@/core/repositories/VCrossReferences';
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();
@@ -31,9 +31,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const renderItem = ({ item }: { item: vcr.VCrossReferences }) => (
     <View key={item.id} style={styles.referenceContainer}>
       <View>
-        <Text style={styles.referenceTitle}>{`${item.bookName} ${
-          item.chapterNumber
-        }:${
+        <Text style={styles.referenceTitle}>{`${item.bookName} ${item.chapterNumber}:${
           item.verseNumberFrom === item.verseNumberTo
             ? item.verseNumberFrom
             : `${item.verseNumberFrom}-${item.verseNumberTo}`
@@ -88,17 +86,17 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     referenceContainer: {
       marginLeft: 30,
       marginVertical: 30,
       borderLeftColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       borderLeftWidth: 3,
-      borderStyle: "solid",
+      borderStyle: 'solid',
     },
     referenceTitle: {
-      textAlign: "center",
+      textAlign: 'center',
       fontFamily: STYLES.FONT.BOLD,
       fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
@@ -106,10 +104,10 @@ function BuildStyleSheet(theme: "dark" | "light") {
     loaderView: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100%",
-      width: "100%",
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%',
     },
   });
 }

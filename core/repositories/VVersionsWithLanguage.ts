@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "expo-sqlite";
+import { SQLiteDatabase } from 'expo-sqlite';
 
 export interface VVersionsWithLanguage {
   id: number;
@@ -9,9 +9,7 @@ export interface VVersionsWithLanguage {
 }
 
 // READ
-export async function GetAllAsync(
-  db: SQLiteDatabase
-): Promise<VVersionsWithLanguage[]> {
+export async function GetAllAsync(db: SQLiteDatabase): Promise<VVersionsWithLanguage[]> {
   let data = await db.getAllAsync<VVersionsWithLanguage>(
     `SELECT 
     versions.id,
@@ -21,7 +19,7 @@ export async function GetAllAsync(
     languages.name AS languageName
 FROM
     versions
-    INNER JOIN languages ON versions.language_id = languages.id`
+    INNER JOIN languages ON versions.language_id = languages.id`,
   );
 
   return data;

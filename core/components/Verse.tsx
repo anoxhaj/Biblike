@@ -1,7 +1,7 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text } from 'react-native';
 
-import { STYLES } from "@/core/constants";
-import { useColorSchemeDefault } from "@/core/hooks";
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
 
 export default function Verse({
   id,
@@ -31,7 +31,7 @@ export default function Verse({
             style={StyleSheet.flatten([
               styles.itemText,
               {
-                textDecorationLine: selected ? "underline" : undefined,
+                textDecorationLine: selected ? 'underline' : undefined,
               },
             ])}
           >
@@ -43,7 +43,7 @@ export default function Verse({
   );
 }
 
-function BuildStyleSheet(theme: "dark" | "light") {
+function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     itemContainer: {
       marginHorizontal: 30,

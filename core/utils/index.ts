@@ -1,1 +1,1 @@
-export { urlBuilder } from "./urlBuilder";
+export { urlBuilder } from './urlBuilder';
