@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import * as NavigationBar from 'expo-navigation-bar';
 import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
+import { setBackgroundColorAsync } from 'expo-system-ui';
 import { STYLES } from '@/core/constants';
 
 import { useColorSchemeDefault } from '@/core/hooks';
@@ -37,6 +38,7 @@ function AppRouter() {
   useEffect(() => {
     const navBarColor = async () => {
       await NavigationBar.setButtonStyleAsync(theme === 'dark' ? 'light' : 'dark');
+      setBackgroundColorAsync(STYLES.COLORS[theme].BACKGROUND.PRIMARY);
     };
     navBarColor();
   }, [theme]);
@@ -49,7 +51,9 @@ function AppRouter() {
   return (
     <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
       <StatusBar style="auto" backgroundColor={STYLES.COLORS[theme].BACKGROUND.PRIMARY} />
+
       <SplashScreenHandler />
+
       <SQLiteProvider
         databaseName="database.db"
         assetSource={{ assetId: require('@/assets/database.db') }}

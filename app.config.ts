@@ -4,7 +4,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Biblike',
   slug: 'biblike',
-  version: '1.3',
+  version: '1.3.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   userInterfaceStyle: 'automatic',
@@ -13,10 +13,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     image: './assets/images/splash-icon.png',
     resizeMode: 'contain',
     backgroundColor: '#F7F3F7',
-    dark: {
-      image: './assets/images/splash-icon.png',
-      backgroundColor: '#F7F3F7',
-    },
   },
   ios: {
     supportsTablet: true,
