@@ -1,15 +1,7 @@
-import Animated, {
-  useSharedValue,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  withSpring,
-  withDelay,
-  interpolate,
-} from 'react-native-reanimated';
-import { scheduleOnRN } from 'react-native-worklets';
+import Animated from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 
 import Verse from '@/core/components/Verse';
@@ -21,13 +13,18 @@ import ReferencesMenu from '@/core/components/ReferencesMenu';
 import { useColorSchemeDefault } from '@/core/hooks';
 import { useUpdateConfig } from '@/core/stores/configs';
 import * as vcwv from '@/core/repositories/VChapterWithVerses';
+import { useHideOnScroll } from '@/core/hooks/useHideOnScroll';
 
 export default function Reader({ versionId, chapterId }: { versionId: number; chapterId: number }) {
+  const router = useRouter();
   const db = useSQLiteContext();
+  const theme = useColorSchemeDefault();
+  const styles = BuildStyleSheet(theme);
+  const updateConfig = useUpdateConfig();
+  const { showMenu, handleScroll, onLayout, onContentSizeChange } = useHideOnScroll();
 
   const [chapter, setChapter] = useState<vcwv.VChapterWithVerses>();
-
-  const updateConfig = useUpdateConfig();
+  const [selectedVerseId, setSelectedVerseId] = useState<number | null>(null);
 
   const fetchChapter = useCallback(() => {
     async function fetch() {
@@ -42,145 +39,6 @@ export default function Reader({ versionId, chapterId }: { versionId: number; ch
   useEffect(() => {
     fetchChapter();
   }, [fetchChapter]);
-
-  const [showMenu, setShowMenu] = useState(true);
-
-  const [selectedVerseId, setSelectedVerseId] = useState<number | null>(null);
-
-  useEffect(() => {
-    animateMenu(showMenu);
-  }, [showMenu]);
-
-  const scrollY = useSharedValue(0);
-  const menuTranslateY = useSharedValue(300);
-  const menuScale = useSharedValue(0.8);
-  const menuOpacity = useSharedValue(0);
-  const menuShadowOpacity = useSharedValue(0);
-  const lastScrollValue = useSharedValue(0);
-  const lastScrollDownStopValue = useSharedValue(0);
-  const lastScrollUpStopValue = useSharedValue(0);
-  const scrollViewHeight = useSharedValue(0);
-  const scrollViewLayoutHeight = useSharedValue(0);
-  const prevScrollY = useSharedValue(0);
-
-  const tolerance = 600;
-  const bottomTolerance = 300;
-  const scrollUpTolerance = 300;
-
-  useEffect(() => {
-    prevScrollY.value = 0;
-  }, []);
-
-  const animateMenu = (show: boolean) => {
-    if (show) {
-      menuTranslateY.value = withSpring(0, {
-        damping: 20,
-        stiffness: 100,
-        mass: 1,
-      });
-      menuScale.value = withDelay(
-        50,
-        withSpring(1, {
-          damping: 15,
-          stiffness: 120,
-          mass: 0.8,
-        }),
-      );
-      menuOpacity.value = withDelay(
-        100,
-        withSpring(1, {
-          damping: 20,
-          stiffness: 100,
-          mass: 1,
-        }),
-      );
-      menuShadowOpacity.value = withDelay(
-        150,
-        withSpring(0.3, {
-          damping: 20,
-          stiffness: 100,
-          mass: 1,
-        }),
-      );
-    } else {
-      menuShadowOpacity.value = withSpring(0, {
-        damping: 25,
-        stiffness: 80,
-        mass: 1.2,
-      });
-      menuOpacity.value = withDelay(
-        100,
-        withSpring(0, {
-          damping: 25,
-          stiffness: 80,
-          mass: 1.2,
-        }),
-      );
-      menuScale.value = withDelay(
-        200,
-        withSpring(0.8, {
-          damping: 20,
-          stiffness: 90,
-          mass: 1,
-        }),
-      );
-      menuTranslateY.value = withDelay(
-        300,
-        withSpring(300, {
-          damping: 25,
-          stiffness: 80,
-          mass: 1.2,
-        }),
-      );
-    }
-  };
-
-  const handleScroll = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      const currentY = event.contentOffset.y;
-      const isScrollingDown = currentY > prevScrollY.value + 1;
-      const isScrollingUp = currentY < prevScrollY.value - 1;
-
-      prevScrollY.value = scrollY.value;
-      scrollY.value = currentY;
-
-      const isNearBottom =
-        scrollY.value >= scrollViewHeight.value - scrollViewLayoutHeight.value - bottomTolerance;
-
-      if (!isNearBottom) {
-        if (
-          isScrollingDown &&
-          scrollY.value > tolerance &&
-          scrollY.value >= lastScrollUpStopValue.value + tolerance
-        ) {
-          lastScrollDownStopValue.value = scrollY.value;
-          lastScrollValue.value = scrollY.value;
-          scheduleOnRN(setShowMenu, false);
-          return;
-        }
-
-        if (
-          isScrollingUp &&
-          lastScrollDownStopValue.value > 0 &&
-          scrollY.value <= lastScrollDownStopValue.value - scrollUpTolerance
-        ) {
-          lastScrollUpStopValue.value = scrollY.value;
-          lastScrollValue.value = scrollY.value;
-          scheduleOnRN(setShowMenu, true);
-          return;
-        }
-      } else {
-        lastScrollValue.value = scrollY.value;
-        lastScrollDownStopValue.value = scrollY.value;
-        lastScrollUpStopValue.value = scrollY.value;
-        if (!showMenu) {
-          scheduleOnRN(setShowMenu, true);
-        }
-      }
-    },
-  });
-
-  const router = useRouter();
 
   const goToCrossReferencesScreen = async (verseId: number) => {
     if (selectedVerseId === verseId) {
@@ -201,39 +59,10 @@ export default function Reader({ versionId, chapterId }: { versionId: number; ch
     ></Verse>
   );
 
-  const theme = useColorSchemeDefault();
-  const styles = BuildStyleSheet(theme);
-
-  const menuAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: menuTranslateY.value }, { scale: menuScale.value }],
-      opacity: menuOpacity.value,
-      shadowOpacity: menuShadowOpacity.value,
-      shadowRadius: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 8]),
-      shadowOffset: {
-        width: 0,
-        height: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 4]),
-      },
-      elevation: interpolate(menuShadowOpacity.value, [0, 0.3], [0, 8]),
-    };
-  });
-
   return (
     <Screen>
       {chapter ? (
         <>
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              height: 50,
-              width: 50,
-              backgroundColor: 'red',
-              zIndex: 2,
-            }}
-          ></View>
-
           <Animated.ScrollView
             overScrollMode="never"
             contentContainerStyle={{
@@ -245,13 +74,8 @@ export default function Reader({ versionId, chapterId }: { versionId: number; ch
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             onScroll={handleScroll}
-            onLayout={(event: any) => {
-              const { height } = event.nativeEvent.layout;
-              scrollViewLayoutHeight.value = height;
-            }}
-            onContentSizeChange={(w, h) => {
-              scrollViewHeight.value = h;
-            }}
+            onLayout={onLayout}
+            onContentSizeChange={onContentSizeChange}
           >
             <Text style={styles.bookName}>{chapter?.bookName}</Text>
             <Text style={styles.chapterNumber}>{chapter?.chapterNumber}</Text>
@@ -259,15 +83,14 @@ export default function Reader({ versionId, chapterId }: { versionId: number; ch
             <Text style={styles.about}>~</Text>
           </Animated.ScrollView>
 
-          <Animated.View style={[styles.menu, menuAnimatedStyle]}>
-            <ReferencesMenu
-              versionId={versionId}
-              chapterId={chapterId}
-              bookId={chapter.bookId}
-              bookName={chapter?.bookName ?? ''}
-              chapterNumber={chapter?.chapterNumber ?? 0}
-            ></ReferencesMenu>
-          </Animated.View>
+          <ReferencesMenu
+            show={showMenu}
+            versionId={versionId}
+            chapterId={chapterId}
+            bookId={chapter.bookId}
+            bookName={chapter?.bookName ?? ''}
+            chapterNumber={chapter?.chapterNumber ?? 0}
+          />
         </>
       ) : (
         <Loader />
@@ -312,12 +135,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       fontFamily: STYLES.FONT.ITALIC,
       fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
-    },
-    menu: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
     },
   });
 }

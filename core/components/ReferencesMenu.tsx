@@ -7,15 +7,18 @@ import { BlurView } from 'expo-blur';
 import { urlBuilder } from '@/core/utils';
 import { STYLES } from '@/core/constants';
 import VersionsPicker from './VersionsPicker';
-import { useColorSchemeDefault } from '@/core/hooks';
+import { useAnimatedMenu, useColorSchemeDefault } from '@/core/hooks';
+import Animated, { SharedValue } from 'react-native-reanimated';
 
 export default function ReferencesMenu({
+  show,
   versionId,
   chapterId,
   bookId,
   bookName,
   chapterNumber,
 }: {
+  show: SharedValue<number>;
   versionId: number;
   chapterId: number;
   bookId: number;
@@ -23,6 +26,10 @@ export default function ReferencesMenu({
   chapterNumber: number;
 }) {
   const router = useRouter();
+  const theme = useColorSchemeDefault();
+  const styles = BuildStyleSheet(theme);
+  const menuAnimatedStyle = useAnimatedMenu(show);
+
   const goToChapterScreen = async (newChapterId: number) => {
     if (newChapterId > 0 && newChapterId <= 1189)
       router.replace(urlBuilder.chapter(versionId, newChapterId));
@@ -32,11 +39,8 @@ export default function ReferencesMenu({
     router.push(urlBuilder.search());
   };
 
-  const theme = useColorSchemeDefault();
-  const styles = BuildStyleSheet(theme);
-
   return (
-    <>
+    <Animated.View style={[styles.menu, menuAnimatedStyle]}>
       <BlurView intensity={100} tint={theme} style={styles.borderContainer}>
         <View style={styles.referencesContainer}>
           <Pressable style={styles.linkContainer} onPress={() => goToChapterScreen(chapterId - 1)}>
@@ -66,12 +70,18 @@ export default function ReferencesMenu({
         </Pressable>
         <VersionsPicker chapterId={chapterId}></VersionsPicker>
       </BlurView>
-    </>
+    </Animated.View>
   );
 }
 
 function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
+    menu: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+    },
     borderContainer: {
       paddingVertical: 12,
       paddingHorizontal: 12,
