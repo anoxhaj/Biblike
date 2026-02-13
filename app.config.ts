@@ -4,11 +4,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Biblike",
   slug: "biblike",
-  version: "1.2.1",
+  version: "1.3",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   userInterfaceStyle: "automatic",
-  newArchEnabled: true,
   scheme: "biblike",
   splash: {
     image: "./assets/images/splash-icon.png",
@@ -21,14 +20,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "com.anonymous.biblike",
+    bundleIdentifier: "com.anoxhaj.biblike",
   },
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#F7F3F7",
     },
-    package: "com.anonymous.biblike",
+    package: "com.anoxhaj.biblike",
   },
   plugins: [
     "expo-router",
