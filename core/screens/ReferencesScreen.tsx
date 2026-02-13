@@ -2,13 +2,13 @@ import { ScrollView } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-import Item from '@/core/components/ReferencesItem';
+import ReferencesItem from '@/core/components/ReferencesItem';
 import Screen from '@/core/components/Screen';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
 import { useCurrentVersion } from '@/core/stores/configs';
 import * as vbwc from '@/core/repositories/VBookWithChapters';
-import Loader from '../components/Loader';
+import Loader from '@/core/components/Loader';
 
 export default function ReferencesGrid({ bookId }: { bookId: number }) {
   const db = useSQLiteContext();
@@ -66,7 +66,7 @@ export default function ReferencesGrid({ bookId }: { bookId: number }) {
           showsVerticalScrollIndicator={false}
         >
           {books.map((item, index) => (
-            <Item
+            <ReferencesItem
               key={index.toString()}
               index={index}
               item={item}

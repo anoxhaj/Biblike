@@ -1,11 +1,10 @@
 import Animated, { SharedValue } from 'react-native-reanimated';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { STYLES } from '@/core/constants';
 import { useRouter } from 'expo-router';
-import { useColorSchemeDefault } from '../hooks/useColorScheme';
-import { useAnimatedMenu } from '../hooks/useAnimatedMenu';
-import { BlurView } from 'expo-blur';
+import { useColorSchemeDefault } from '@/core/hooks/useColorScheme';
+import { useAnimatedMenu } from '@/core/hooks/useAnimatedMenu';
 import React from 'react';
 import VersionsPicker from './VersionsPicker';
 import { Ionicons } from '@expo/vector-icons';
@@ -29,12 +28,12 @@ export default function TopMenu({
 
   return (
     <Animated.View style={[styles.menu, menuAnimatedStyle]}>
-      <BlurView intensity={0} tint={theme} style={styles.borderContainer}>
+      <View style={styles.borderContainer}>
         <Pressable style={styles.searchButton} onPress={goToSearchScreen}>
           <Ionicons name="search" size={21} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
         </Pressable>
         <VersionsPicker chapterId={chapterId} />
-      </BlurView>
+      </View>
     </Animated.View>
   );
 }

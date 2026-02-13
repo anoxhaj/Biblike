@@ -59,15 +59,6 @@ function normalize(str: string) {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-function extractFtsTokens(query: string): string[] {
-  return query
-    .toLowerCase()
-    .trim()
-    .split(/\s+/)
-    .map((t) => t.replace(/["*]/g, '')) // remove quotes & prefix operator
-    .filter((t) => t.length > 0);
-}
-
 function HighlightText({
   text,
   highlight,
@@ -88,7 +79,6 @@ function HighlightText({
   const normalizedText = normalize(text);
   const normalizedTokens = tokens.map(normalize);
 
-  // Match ANY token
   const regex = new RegExp(`(${normalizedTokens.join('|')})`, 'gi');
 
   const parts: { text: string; highlighted: boolean }[] = [];
@@ -172,8 +162,8 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
     highlight: {
-      backgroundColor: 'yellow', //STYLES.COLORS[theme].ACCENT,
-      color: '#000', //STYLES.COLORS[theme].TEXT.ON_ACCENT,
+      backgroundColor: 'yellow',
+      color: '#000',
       fontFamily: STYLES.FONT.BOLD,
     },
   });

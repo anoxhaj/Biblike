@@ -50,7 +50,7 @@ export default function SearchScreen() {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       performSearch(searchQuery);
-    }, 500);
+    }, 700);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, performSearch]);
@@ -114,7 +114,7 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       fontFamily: STYLES.FONT.ITALIC,
       fontSize: 18,
       textAlign: 'center',
-      color: STYLES.COLORS[theme].TEXT.SECONDARY,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
       lineHeight: 28,
     },
   });

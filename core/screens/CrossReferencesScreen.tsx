@@ -45,7 +45,7 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
           text={verse.verseText}
           selected={false}
           onPress={() => {}}
-        ></Verse>
+        />
       ))}
     </View>
   );

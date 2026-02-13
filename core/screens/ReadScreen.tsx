@@ -14,7 +14,7 @@ import { useColorSchemeDefault } from '@/core/hooks';
 import { useUpdateConfig } from '@/core/stores/configs';
 import * as vcwv from '@/core/repositories/VChapterWithVerses';
 import { useHideOnScroll } from '@/core/hooks/useHideOnScroll';
-import TopMenu from '../components/TopMenu';
+import TopMenu from '@/core/components/TopMenu';
 
 export default function Reader({ versionId, chapterId }: { versionId: number; chapterId: number }) {
   const router = useRouter();
@@ -69,7 +69,7 @@ export default function Reader({ versionId, chapterId }: { versionId: number; ch
           <Animated.ScrollView
             overScrollMode="never"
             contentContainerStyle={{
-              paddingTop: 90,
+              paddingTop: 60,
               paddingBottom: 60,
               backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             }}
