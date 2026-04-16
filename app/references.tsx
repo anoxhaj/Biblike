@@ -1,28 +1,25 @@
-import { useEffect } from "react";
-import { BackHandler } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from 'react';
+import { BackHandler } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import ReferencesGrid from "@/components/Grid/ReferencesGrid";
+import ReferencesScreen from '@/core/screens/ReferencesScreen';
 
-export default function ReferencesScreen() {
+export default function ReferencesRoute() {
   const router = useRouter();
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        router.dismissAll();
-        return true;
-      }
-    );
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      router.dismissAll();
+      return true;
+    });
 
     return () => {
       backHandler.remove();
     };
-  }, []);
+  }, [router]);
 
   const { bookId } = useLocalSearchParams();
   const bookN = Number(bookId);
 
-  return <ReferencesGrid bookId={bookN} />;
+  return <ReferencesScreen bookId={bookN} />;
 }

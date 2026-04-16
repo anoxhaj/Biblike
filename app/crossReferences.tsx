@@ -1,25 +1,22 @@
-import { useEffect } from "react";
-import { BackHandler } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from 'react';
+import { BackHandler } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import CrossReferences from "@/components/CrossReferences/CrossReferencesList";
+import CrossReferences from '@/core/screens/CrossReferencesScreen';
 
-export default function CrossReferencesScreen() {
+export default function CrossReferencesRoute() {
   const router = useRouter();
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        router.dismissAll();
-        return true;
-      }
-    );
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      router.dismissAll();
+      return true;
+    });
 
     return () => {
       backHandler.remove();
     };
-  }, []);
+  }, [router]);
 
   const { verseId } = useLocalSearchParams();
   const verseN = Number(verseId);

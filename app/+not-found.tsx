@@ -1,15 +1,15 @@
-import { useRouter, useFocusEffect } from "expo-router";
+import { useRouter, useFocusEffect } from 'expo-router';
 
-import * as Helper from "@/helpers/Helper";
-import { useCurrentVersion, useCurrentChapter } from "@/constants/store";
+import { urlBuilder } from '@/core/utils';
+import { useCurrentVersion, useCurrentChapter } from '@/core/stores/configs';
 
-export default function NotFoundScreen() {
+export default function NotFoundRoute() {
   const router = useRouter();
   const currentVersion = useCurrentVersion();
   const currentChapter = useCurrentChapter();
 
   useFocusEffect(() => {
-    const url = Helper.buildChapterUrl(currentVersion, currentChapter);
+    const url = urlBuilder.chapter(currentVersion, currentChapter);
     router.replace(url);
   });
 

@@ -1,29 +1,26 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { useEffect } from "react";
-import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
-import * as NavigationBar from "expo-navigation-bar";
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import * as NavigationBar from 'expo-navigation-bar';
+import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
+import { setBackgroundColorAsync } from 'expo-system-ui';
+import { STYLES } from '@/core/constants';
 
-import * as Styles from "@/constants/Styles";
-import useColorSchemeDefault from "@/hooks/useColorScheme";
-import { useSettingsLoading, useAppSettingsStore } from "@/constants/store";
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useConfigsLoading, useConfigsStore } from '@/core/stores/configs';
+import { Stack } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
 function SplashScreenHandler() {
-  const isLoadingSettings = useSettingsLoading();
+  const isLoadingSettings = useConfigsLoading();
 
   const loadedFont = useFonts({
-    SerifBold: require("@/assets/fonts/serifBold.ttf"),
-    SerifItalic: require("@/assets/fonts/serifItalic.ttf"),
-    SerifRegular: require("@/assets/fonts/serifRegular.ttf"),
+    SerifBold: require('@/assets/fonts/serifBold.ttf'),
+    SerifItalic: require('@/assets/fonts/serifItalic.ttf'),
+    SerifRegular: require('@/assets/fonts/serifRegular.ttf'),
   });
 
   useEffect(() => {
@@ -35,52 +32,46 @@ function SplashScreenHandler() {
   return null;
 }
 
-function AppContent() {
+function AppRouter() {
   const theme = useColorSchemeDefault();
 
   useEffect(() => {
     const navBarColor = async () => {
-      await NavigationBar.setBackgroundColorAsync(
-        theme === "dark" ? "#0C080C" : "#F7F3F7"
-      );
-
-      await NavigationBar.setButtonStyleAsync(
-        theme === "dark" ? "light" : "dark"
-      );
+      await NavigationBar.setButtonStyleAsync(theme === 'dark' ? 'light' : 'dark');
+      setBackgroundColorAsync(STYLES.COLORS[theme].BACKGROUND.PRIMARY);
     };
     navBarColor();
   }, [theme]);
 
   const loadData = async (db: SQLiteDatabase) => {
-    const store = useAppSettingsStore.getState();
-    await store.loadSettings(db);
+    const store = useConfigsStore.getState();
+    await store.loadConfigs(db);
   };
 
   return (
-    <ThemeProvider value={theme === "dark" ? DarkTheme : DefaultTheme}>
-      <StatusBar
-        style="auto"
-        backgroundColor={theme === "dark" ? "#0C080C" : "#F7F3F7"}
-      />
+    <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
+      <StatusBar style="auto" backgroundColor={STYLES.COLORS[theme].BACKGROUND.PRIMARY} />
+
       <SplashScreenHandler />
+
       <SQLiteProvider
         databaseName="database.db"
-        assetSource={{ assetId: require("@/assets/database.db") }}
+        assetSource={{ assetId: require('@/assets/database.db') }}
         onInit={loadData}
       >
         <Stack
           screenOptions={{
             headerStyle: {
-              backgroundColor: Styles.Colors[theme].primaryBackground,
+              backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             },
             headerTitleStyle: {
-              fontFamily: Styles.Font.bold,
-              fontSize: Styles.Font.size,
+              fontFamily: STYLES.FONT.BOLD,
+              fontSize: 21,
             },
             contentStyle: {
-              backgroundColor: theme === "dark" ? "#0C080C" : "#F7F3F7",
+              backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
             },
-            animation: "none",
+            animation: 'fade',
           }}
         >
           <Stack.Screen
@@ -92,19 +83,25 @@ function AppContent() {
           <Stack.Screen
             name="references"
             options={{
-              headerTitle: "References",
+              headerTitle: 'References',
             }}
           />
           <Stack.Screen
             name="crossReferences"
             options={{
-              headerTitle: "Cross References",
+              headerTitle: 'Cross References',
             }}
           />
           <Stack.Screen
             name="read"
             options={{
               headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="search"
+            options={{
+              headerTitle: 'Search',
             }}
           />
           <Stack.Screen name="+not-found" />
@@ -115,5 +112,5 @@ function AppContent() {
 }
 
 export default function RootLayout() {
-  return <AppContent />;
+  return <AppRouter />;
 }
