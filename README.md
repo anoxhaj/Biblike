@@ -9,11 +9,11 @@ A minimalistic offline Bible reading mobile application, built with:
 ### Features
 
 - Multiple versions
-- Cross-references *from* [Open Bible info](https://www.openbible.info/labs/cross-references/)
+- Cross-references *from* https://www.openbible.info/labs/cross-references/
 - Search
 - Light/dark mode
 
 ### Bible Versions
 
-- Lajmi i Mire 1994 - ALBB (shqip) *from* [Bible Gateway](https://www.biblegateway.com/passage/?search=Genesis%201&version=ALB) 
-- King James 1611 - KJV (english) *from* [Bible Gateway](https://www.biblegateway.com/passage/?search=Genesis%201&version=KJV)
+- Lajmi i Mire 1994 - ALBB (shqip) *from* https://www.biblegateway.com/passage/?search=Genesis%201&version=ALB
+- King James 1611 - KJV (english) *from* https://www.biblegateway.com/passage/?search=Genesis%201&version=KJV
