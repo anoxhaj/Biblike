@@ -1,4 +1,4 @@
-# Biblike(1.3)
+# Biblike(1.3.0)
 
 A minimalistic offline Bible reading mobile application, built with:
 
@@ -8,12 +8,12 @@ A minimalistic offline Bible reading mobile application, built with:
 
 ### Features
 
-- Multiple translations.
-- Cross-references (Tap a verse to select and underline it, tap it another time to show the hidden view).
-- Search.
-- Light/dark mode.
+- Multiple versions
+- Cross-references *from* [Open Bible info](https://www.openbible.info/labs/cross-references/)
+- Search
+- Light/dark mode
 
 ### Bible Versions
 
-- Lajmi i Mire 1994 - ALBB (shqip)
-- King James 1611 - KJV (english)
+- Lajmi i Mire 1994 - ALBB (shqip) *from* [Bible Gateway](https://www.biblegateway.com/passage/?search=Genesis%201&version=ALB) 
+- King James 1611 - KJV (english) *from* [Bible Gateway](https://www.biblegateway.com/passage/?search=Genesis%201&version=KJV)
