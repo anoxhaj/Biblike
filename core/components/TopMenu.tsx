@@ -7,7 +7,7 @@ import { useColorSchemeDefault } from '@/core/hooks/useColorScheme';
 import { useAnimatedMenu } from '@/core/hooks/useAnimatedMenu';
 import React from 'react';
 import VersionsPicker from './VersionsPicker';
-import Ionicons from "@react-native-vector-icons/ionicons/static";
+import Ionicons from '@react-native-vector-icons/ionicons/static';
 import { urlBuilder } from '@/core/utils';
 
 export default function TopMenu({

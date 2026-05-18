@@ -1,5 +1,5 @@
 import { useRouter, Link } from 'expo-router';
-import Entypo from "@react-native-vector-icons/entypo/static";
+import Entypo from '@react-native-vector-icons/entypo/static';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 
 import { urlBuilder } from '@/core/utils';
