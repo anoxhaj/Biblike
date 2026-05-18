@@ -49,6 +49,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         imageWidth: 200,
       },
     ],
+    '@react-native-vector-icons/entypo',
+    '@react-native-vector-icons/ionicons',
   ],
   extra: {
     eas: {
