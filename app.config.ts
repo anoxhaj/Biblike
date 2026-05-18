@@ -9,11 +9,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/images/icon.png',
   userInterfaceStyle: 'automatic',
   scheme: 'biblike',
-  splash: {
-    image: './assets/images/splash-icon.png',
-    resizeMode: 'contain',
-    backgroundColor: '#F7F3F7',
-  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.anoxhaj.biblike',
@@ -40,6 +35,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ios: {
           customBuildFlags: ['-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1'],
         },
+      },
+    ],
+    [
+      'expo-splash-screen',
+      {
+        backgroundColor: '#F7F3F7',
+        image: './assets/images/splash-icon.png',
+        dark: {
+          image: './assets/images/splash-icon.png',
+          backgroundColor: '#493149',
+        },
+        imageWidth: 200,
       },
     ],
   ],
