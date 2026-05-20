@@ -144,19 +144,19 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       borderBottomColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
     },
     modalTitle: {
-      fontSize: 20,
+      fontSize: 18,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
       fontFamily: STYLES.FONT.BOLD,
     },
     closeButton: {
-      fontSize: 24,
+      fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.SECONDARY,
     },
     scrollView: {
       maxHeight: '100%',
     },
     versionItem: {
-      padding: 16,
+      padding: 10,
       borderBottomWidth: 1,
       borderBottomColor: colors.BACKGROUND.SECONDARY,
     },

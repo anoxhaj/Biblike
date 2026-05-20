@@ -16,6 +16,7 @@ export default function SearchResults({
 }) {
   const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
+
   const router = useRouter();
   const currentVersion = useCurrentVersion();
 
@@ -25,33 +26,35 @@ export default function SearchResults({
   };
 
   const renderItem = ({ item }: { item: vsr.VSearchResult }) => (
-    <Pressable
-      key={item.id}
-      style={styles.resultItem}
-      onPress={() => handleVersePress(item.chapterId)}
-    >
-      <View style={styles.referenceContainer}>
-        <Text style={styles.referenceText}>
-          {item.bookName} {item.chapterNumber}:{item.verseNumber}
-        </Text>
+    <Pressable style={styles.itemContainer} onPress={() => handleVersePress(item.chapterId)}>
+      <Text style={styles.itemTitle}>
+        {item.bookName} {item.chapterNumber}:{item.verseNumber}
+      </Text>
+
+      <View style={styles.verseContainer}>
+        <HighlightText
+          text={item.text}
+          highlight={searchQuery}
+          textStyle={styles.verseText}
+          highlightStyle={styles.highlight}
+        />
       </View>
-      <HighlightText
-        text={item.text}
-        highlight={searchQuery}
-        textStyle={styles.verseText}
-        highlightStyle={styles.highlight}
-      />
     </Pressable>
   );
 
-  return (
+  return results.length > 0 ? (
     <FlatList
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
-      renderItem={renderItem}
       data={results}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
     />
+  ) : (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>No matches were found</Text>
+    </View>
   );
 }
 
@@ -82,6 +85,7 @@ function HighlightText({
   const regex = new RegExp(`(${normalizedTokens.join('|')})`, 'gi');
 
   const parts: { text: string; highlighted: boolean }[] = [];
+
   let lastIndex = 0;
 
   normalizedText.replace(regex, (match, _p1, offset) => {
@@ -96,6 +100,7 @@ function HighlightText({
     });
 
     lastIndex = offset + match.length;
+
     return match;
   });
 
@@ -126,45 +131,51 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
     },
     contentContainer: {
-      paddingTop: 20,
+      paddingTop: 10,
       paddingBottom: 40,
     },
-    resultItem: {
-      marginHorizontal: 20,
-      marginVertical: 10,
-      padding: 15,
-      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
-      borderRadius: 8,
+    itemContainer: {
+      marginLeft: 30,
+      marginRight: 20,
+      marginVertical: 30,
+      borderLeftColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
+      borderLeftWidth: 3,
+      paddingLeft: 20,
     },
-    referenceContainer: {
-      marginBottom: 8,
-    },
-    referenceText: {
+    itemTitle: {
+      textAlign: 'center',
       fontFamily: STYLES.FONT.BOLD,
-      fontSize: 16,
+      fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      marginBottom: 21,
+    },
+    verseContainer: {
+      paddingRight: 10,
     },
     verseText: {
       fontFamily: STYLES.FONT.REGULAR,
-      fontSize: 18,
-      lineHeight: 28,
+      fontSize: 19,
+      lineHeight: 33,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
+    },
+    highlight: {
+      backgroundColor: theme === 'dark' ? 'rgba(255,255,0,0.35)' : 'rgba(255,255,0,0.6)',
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      fontFamily: STYLES.FONT.BOLD,
     },
     emptyContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      paddingTop: 100,
+      paddingHorizontal: 40,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
     },
     emptyText: {
       fontFamily: STYLES.FONT.ITALIC,
       fontSize: 18,
-      color: STYLES.COLORS[theme].TEXT.SECONDARY,
-    },
-    highlight: {
-      backgroundColor: 'yellow',
-      color: '#000',
-      fontFamily: STYLES.FONT.BOLD,
+      textAlign: 'center',
+      lineHeight: 28,
+      color: STYLES.COLORS[theme].TEXT.PRIMARY,
     },
   });
 }

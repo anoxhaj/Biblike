@@ -57,7 +57,7 @@ export default function Reader({ versionId, chapterId }: { versionId: number; ch
       text={item.text}
       selected={selectedVerseId === item.id}
       onPress={goToCrossReferencesScreen}
-    ></Verse>
+    />
   );
 
   return (

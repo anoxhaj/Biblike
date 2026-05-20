@@ -60,7 +60,7 @@ export default function SearchScreen() {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search verses..."
+          placeholder="Search in verses..."
           placeholderTextColor={STYLES.COLORS[theme].TEXT.SECONDARY}
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -92,17 +92,16 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
     },
     searchContainer: {
-      paddingHorizontal: 20,
+      paddingHorizontal: 30,
       paddingTop: 20,
       paddingBottom: 10,
     },
     searchInput: {
       fontFamily: STYLES.FONT.REGULAR,
       fontSize: 18,
-      padding: 15,
-      backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
-      borderRadius: 8,
+      borderBottomColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
+      borderBottomWidth: 3,
     },
     instructionContainer: {
       flex: 1,
