@@ -1,5 +1,5 @@
 import { useRouter, Link } from 'expo-router';
-import Entypo from '@expo/vector-icons/Entypo';
+import Entypo from '@react-native-vector-icons/entypo/static';
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 
 import { urlBuilder } from '@/core/utils';
@@ -66,6 +66,7 @@ export default function ReferencesMenu({
 function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     menu: {
+      zIndex: 3,
       position: 'absolute',
       bottom: 0,
       left: 0,
@@ -87,9 +88,8 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       borderRadius: 21,
       paddingHorizontal: 6,
       paddingVertical: 3,
-      height: 40,
+      height: 45,
       flex: 1,
-      elevation: 3,
     },
     mainLink: {
       fontSize: 18,

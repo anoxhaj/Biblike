@@ -4,16 +4,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Biblike',
   slug: 'biblike',
-  version: '1.3.0',
+  version: '1.4.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   userInterfaceStyle: 'automatic',
   scheme: 'biblike',
-  splash: {
-    image: './assets/images/splash-icon.png',
-    resizeMode: 'contain',
-    backgroundColor: '#F7F3F7',
-  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.anoxhaj.biblike',
@@ -42,6 +37,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         },
       },
     ],
+    [
+      'expo-splash-screen',
+      {
+        backgroundColor: '#F7F3F7',
+        image: './assets/images/splash-icon.png',
+        dark: {
+          image: './assets/images/splash-icon.png',
+          backgroundColor: '#493149',
+        },
+        imageWidth: 200,
+      },
+    ],
+    '@react-native-vector-icons/entypo',
+    '@react-native-vector-icons/ionicons',
   ],
   extra: {
     eas: {

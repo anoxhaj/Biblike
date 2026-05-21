@@ -12,14 +12,15 @@ export function useAnimatedMenu(show: SharedValue<number>, offset: number) {
   const firstRender = useRef(true);
   const direction = offset >= 0 ? 1 : -1;
 
-  const translateY = useSharedValue(show.value === 1 ? 0 : Math.abs(offset));
-  const opacity = useSharedValue(show.value === 1 ? 1 : 0);
+  const translateY = useSharedValue(Math.abs(offset));
+  const opacity = useSharedValue(0);
 
   useAnimatedReaction(
     () => show.value,
     (visible, previous) => {
       if (visible === previous) return;
 
+      // initial sync only once
       if (firstRender.current) {
         translateY.value = visible === 1 ? 0 : Math.abs(offset);
         opacity.value = visible === 1 ? 1 : 0;
@@ -65,12 +66,8 @@ export function useAnimatedMenu(show: SharedValue<number>, offset: number) {
     },
   );
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: direction * translateY.value }],
-      opacity: opacity.value,
-    };
-  });
-
-  return animatedStyle;
+  return useAnimatedStyle(() => ({
+    transform: [{ translateY: direction * translateY.value }],
+    opacity: opacity.value,
+  }));
 }

@@ -65,7 +65,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       paddingVertical: 12,
       paddingHorizontal: 12,
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
-      elevation: 3,
     },
     titleContainer: {
       overflow: 'hidden',

@@ -1,16 +1,15 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
-import * as NavigationBar from 'expo-navigation-bar';
+import { NavigationBar } from 'expo-navigation-bar';
 import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
 import { setBackgroundColorAsync } from 'expo-system-ui';
 import { STYLES } from '@/core/constants';
 
 import { useColorSchemeDefault } from '@/core/hooks';
 import { useConfigsLoading, useConfigsStore } from '@/core/stores/configs';
-import { Stack } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,11 +35,11 @@ function AppRouter() {
   const theme = useColorSchemeDefault();
 
   useEffect(() => {
-    const navBarColor = async () => {
-      await NavigationBar.setButtonStyleAsync(theme === 'dark' ? 'light' : 'dark');
-      setBackgroundColorAsync(STYLES.COLORS[theme].BACKGROUND.PRIMARY);
+    const setUIBackgroundColor = async () => {
+      await setBackgroundColorAsync(STYLES.COLORS[theme].BACKGROUND.PRIMARY);
     };
-    navBarColor();
+
+    setUIBackgroundColor();
   }, [theme]);
 
   const loadData = async (db: SQLiteDatabase) => {
@@ -50,7 +49,7 @@ function AppRouter() {
 
   return (
     <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
-      <StatusBar style="auto" backgroundColor={STYLES.COLORS[theme].BACKGROUND.PRIMARY} />
+      <StatusBar style="auto" />
 
       <SplashScreenHandler />
 
@@ -107,6 +106,8 @@ function AppRouter() {
           <Stack.Screen name="+not-found" />
         </Stack>
       </SQLiteProvider>
+
+      <NavigationBar style="auto" hidden={false} />
     </ThemeProvider>
   );
 }

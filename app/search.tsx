@@ -1,5 +1,5 @@
 import SearchScreen from '@/core/screens/SearchScreen';
-import { Router, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { BackHandler } from 'react-native';
 

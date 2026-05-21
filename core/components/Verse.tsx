@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, LayoutChangeEvent } from 'react-native';
 
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
@@ -9,25 +9,30 @@ export default function Verse({
   text,
   onPress,
   selected = false,
+  onLayout,
+  onLongPress,
 }: {
   id: number;
   number: number;
   text: string;
   onPress: any;
   selected: boolean;
+  onLongPress?: (id: number) => void;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }) {
   const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
 
   return (
     <>
-      <View style={styles.itemContainer} key={id}>
+      <View style={styles.itemContainer} key={id} onLayout={onLayout}>
         <Text>
           <View>
             <Text style={styles.superscript}>{number} &nbsp;&nbsp;&nbsp;</Text>
           </View>
           <Text
             onPress={() => onPress(id)}
+            onLongPress={() => onLongPress?.(id)}
             style={StyleSheet.flatten([
               styles.itemText,
               {
