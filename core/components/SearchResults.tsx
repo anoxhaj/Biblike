@@ -20,13 +20,16 @@ export default function SearchResults({
   const router = useRouter();
   const currentVersion = useCurrentVersion();
 
-  const handleVersePress = (chapterId: number) => {
-    const url = urlBuilder.chapter(currentVersion, chapterId);
+  const handleVersePress = (chapterId: number, verseId: number) => {
+    const url = urlBuilder.chapter(currentVersion, chapterId, verseId);
     router.push(url);
   };
 
   const renderItem = ({ item }: { item: vsr.VSearchResult }) => (
-    <Pressable style={styles.itemContainer} onPress={() => handleVersePress(item.chapterId)}>
+    <Pressable
+      style={styles.itemContainer}
+      onPress={() => handleVersePress(item.chapterId, item.verseId)}
+    >
       <Text style={styles.itemTitle}>
         {item.bookName} {item.chapterNumber}:{item.verseNumber}
       </Text>

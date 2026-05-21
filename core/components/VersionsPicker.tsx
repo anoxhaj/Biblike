@@ -115,7 +115,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       justifyContent: 'center',
       alignItems: 'center',
-      elevation: 3,
     },
     circleText: {
       fontSize: 16,

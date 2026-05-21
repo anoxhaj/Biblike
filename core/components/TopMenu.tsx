@@ -62,7 +62,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       borderRadius: 21,
       justifyContent: 'center',
       alignItems: 'center',
-      elevation: 3,
     },
   });
 }

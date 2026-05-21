@@ -15,9 +15,10 @@ export default function ReadRoute() {
     };
   }, []);
 
-  const { versionId, chapterId } = useLocalSearchParams();
+  const { versionId, chapterId, verseId } = useLocalSearchParams();
   const chapterN = Number(chapterId);
   const versionN = Number(versionId);
+  const verseN = Number(verseId);
 
-  return <ReadScreen versionId={versionN} chapterId={chapterN} />;
+  return <ReadScreen versionId={versionN} chapterId={chapterN} verseId={verseN} />;
 }
