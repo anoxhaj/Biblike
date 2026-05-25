@@ -16,7 +16,7 @@ SplashScreen.preventAutoHideAsync();
 function SplashScreenHandler() {
   const isLoadingSettings = useConfigsLoading();
 
-  const loadedFont = useFonts({
+  const [loadedFont] = useFonts({
     SerifBold: require('@/assets/fonts/serifBold.ttf'),
     SerifItalic: require('@/assets/fonts/serifItalic.ttf'),
     SerifRegular: require('@/assets/fonts/serifRegular.ttf'),

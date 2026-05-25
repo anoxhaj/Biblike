@@ -129,9 +129,12 @@ export default function Reader({
   const exitCopyMode = () => {
     setShowReferencesMenu(true);
 
+    if (showMenu.value == 1) setSelectedVerseIds([]);
+
     const t = setTimeout(() => {
       setCopyMode(false);
-      setSelectedVerseIds([]);
+
+      if (showMenu.value == 0) setSelectedVerseIds([]);
     }, 300);
 
     return () => clearTimeout(t);
