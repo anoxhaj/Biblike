@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import { useFonts } from 'expo-font';
-import { StatusBar } from 'expo-status-bar';
-import * as SplashScreen from 'expo-splash-screen';
-import { NavigationBar } from 'expo-navigation-bar';
-import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
-import { setBackgroundColorAsync } from 'expo-system-ui';
-import { STYLES } from '@/core/constants';
 
+import { useFonts } from 'expo-font';
+import { NavigationBar } from 'expo-navigation-bar';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
+import { StatusBar } from 'expo-status-bar';
+import { setBackgroundColorAsync } from 'expo-system-ui';
+
+import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
 import { useConfigsLoading, useConfigsStore } from '@/core/stores/configs';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 

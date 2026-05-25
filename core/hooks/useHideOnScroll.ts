@@ -1,4 +1,4 @@
-import { useSharedValue, useAnimatedScrollHandler, SharedValue } from 'react-native-reanimated';
+import { SharedValue, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 
 type Options = {
   tolerance?: number;

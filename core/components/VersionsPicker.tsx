@@ -1,20 +1,22 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  ScrollView,
-  Pressable,
-} from 'react-native';
 import { useState } from 'react';
+
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 
-import { useUpdateConfig, useCurrentVersion, useVersions } from '@/core/stores/configs';
-import { urlBuilder } from '@/core/utils';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
+import { useCurrentVersion, useUpdateConfig, useVersions } from '@/core/stores/configs';
+import { urlBuilder } from '@/core/utils';
 
 export default function VersionsPicker({ chapterId }: { chapterId: number }) {
   const router = useRouter();

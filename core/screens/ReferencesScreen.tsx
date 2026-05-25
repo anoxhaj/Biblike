@@ -1,14 +1,16 @@
-import { ScrollView } from 'react-native';
-import { useSQLiteContext } from 'expo-sqlite';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { ScrollView } from 'react-native';
+
+import { useSQLiteContext } from 'expo-sqlite';
+
+import Loader from '@/core/components/Loader';
 import ReferencesItem from '@/core/components/ReferencesItem';
 import Screen from '@/core/components/Screen';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
-import { useCurrentVersion } from '@/core/stores/configs';
 import * as vbwc from '@/core/repositories/VBookWithChapters';
-import Loader from '@/core/components/Loader';
+import { useCurrentVersion } from '@/core/stores/configs';
 
 export default function ReferencesGrid({ bookId }: { bookId: number }) {
   const db = useSQLiteContext();

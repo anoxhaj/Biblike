@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, LayoutChangeEvent } from 'react-native';
+import { LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';

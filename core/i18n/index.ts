@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
 import enGB from './locales/en-GB.json';
 import sqAL from './locales/sq-AL.json';
 

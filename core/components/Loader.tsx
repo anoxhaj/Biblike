@@ -1,4 +1,4 @@
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';

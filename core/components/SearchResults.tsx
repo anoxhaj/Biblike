@@ -1,11 +1,12 @@
-import { View, StyleSheet, Text, FlatList, Pressable } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { useRouter } from 'expo-router';
 
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
-import { urlBuilder } from '@/core/utils';
-import { useCurrentVersion } from '@/core/stores/configs';
 import * as vsr from '@/core/repositories/VSearchResults';
+import { useCurrentVersion } from '@/core/stores/configs';
+import { urlBuilder } from '@/core/utils';
 
 export default function SearchResults({
   results,

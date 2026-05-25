@@ -1,12 +1,14 @@
-import { Text, TouchableOpacity, StyleSheet, Pressable, Dimensions, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import { useRouter } from 'expo-router';
+
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
-import { urlBuilder } from '@/core/utils';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
-import { useCurrentVersion } from '@/core/stores/configs';
 import * as vbwc from '@/core/repositories/VBookWithChapters';
+import { useCurrentVersion } from '@/core/stores/configs';
+import { urlBuilder } from '@/core/utils';
 
 export default function ReferencesItem({
   index,

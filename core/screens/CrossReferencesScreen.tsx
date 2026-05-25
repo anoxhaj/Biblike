@@ -1,14 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
-import { FlatList, Text, View, StyleSheet } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+
 import { useSQLiteContext } from 'expo-sqlite';
 
-import Verse from '@/core/components/Verse';
 import Loader from '@/core/components/Loader';
 import Screen from '@/core/components/Screen';
+import Verse from '@/core/components/Verse';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
-import { useCurrentVersion } from '@/core/stores/configs';
 import * as vcr from '@/core/repositories/VCrossReferences';
+import { useCurrentVersion } from '@/core/stores/configs';
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();

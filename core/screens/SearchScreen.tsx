@@ -1,14 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TextInput, Text } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+
 import { useSQLiteContext } from 'expo-sqlite';
 
-import Screen from '@/core/components/Screen';
 import Loader from '@/core/components/Loader';
+import Screen from '@/core/components/Screen';
 import SearchResults from '@/core/components/SearchResults';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
-import { useCurrentVersion } from '@/core/stores/configs';
 import * as vsr from '@/core/repositories/VSearchResults';
+import { useCurrentVersion } from '@/core/stores/configs';
 
 export default function SearchScreen() {
   const db = useSQLiteContext();

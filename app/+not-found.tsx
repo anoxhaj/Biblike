@@ -1,7 +1,7 @@
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 
+import { useCurrentChapter, useCurrentVersion } from '@/core/stores/configs';
 import { urlBuilder } from '@/core/utils';
-import { useCurrentVersion, useCurrentChapter } from '@/core/stores/configs';
 
 export default function NotFoundRoute() {
   const router = useRouter();
