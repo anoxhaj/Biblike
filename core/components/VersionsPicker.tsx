@@ -125,7 +125,7 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
     },
     modalOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: STYLES.COLORS[theme].TEXT.SECONDARY + '80',
       justifyContent: 'center',
       alignItems: 'center',
     },
