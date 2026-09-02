@@ -15,5 +15,6 @@ A minimalistic offline Bible reading mobile application, built with:
 
 ### Bible Versions
 
-- Lajmi i Mire 1994 - ALBB (shqip) _from_ [BibleGateway](https://www.biblegateway.com/passage/?search=Genesis%201&version=ALB)
-- King James 1611 - KJV (english) _from_ [BibleGateway](https://www.biblegateway.com/passage/?search=Genesis%201&version=KJV)
+- Lajmi i Mire 1994 - ALBB (shqip)
+- King James 1611 - KJV (english)
+- Giovanni Diodati 1649 - GDB (italiano)
