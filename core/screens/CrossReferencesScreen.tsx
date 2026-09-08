@@ -16,6 +16,8 @@ import * as vcr from '@/core/repositories/VCrossReferences';
 import { useCurrentVersion, useVersions } from '@/core/stores/configs';
 import { formatVersesForCopy } from '@/core/utils';
 
+import CopyButton from '../components/CopyButton';
+
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();
   const [crosses, setCrosses] = useState<vcr.VCrossReferences[] | null>(null);
@@ -61,22 +63,10 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
             item.verseNumberFrom === item.verseNumberTo
               ? item.verseNumberFrom
               : `${item.verseNumberFrom}-${item.verseNumberTo}`
-          }`}{' '}
-          <Text
-            numberOfLines={1}
-            style={{
-              flexShrink: 0,
-            }}
-          >{`(v: ${item.votes})`}</Text>
+          }`}
         </Text>
-        <Pressable
-          onPress={() => handleCopy(item)}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityLabel="Copy verses"
-        >
-          <Ionicons name="copy-outline" size={18} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
-        </Pressable>
+
+        <CopyButton onCopy={() => handleCopy(item)} accessibilityLabel="Copy verse" />
       </View>
       {item.verses.map((verse: vcr.Verse, index: number) => (
         <Verse

@@ -158,8 +158,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
     },
     versionItem: {
       padding: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.BACKGROUND.SECONDARY,
     },
     versionItemSelected: {
       backgroundColor: colors.BACKGROUND.SECONDARY,
