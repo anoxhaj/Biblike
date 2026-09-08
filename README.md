@@ -1,9 +1,9 @@
-# Biblike(1.4.0)
+# Biblike(1.5.0)
 
 A minimalistic offline Bible reading mobile application, built with:
 
 - React Native
-- Expo (SDK 56)
+- Expo (SDK 57)
 - SQLite3
 
 ### Features
