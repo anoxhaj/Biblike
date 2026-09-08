@@ -1,11 +1,13 @@
-import { useRouter, Link } from 'expo-router';
-import Entypo from '@react-native-vector-icons/entypo/static';
-import { View, StyleSheet, Pressable, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { urlBuilder } from '@/core/utils';
+import { Link, useRouter } from 'expo-router';
+
+import Entypo from '@react-native-vector-icons/entypo/static';
+import Animated, { SharedValue } from 'react-native-reanimated';
+
 import { STYLES } from '@/core/constants';
 import { useAnimatedMenu, useColorSchemeDefault } from '@/core/hooks';
-import Animated, { SharedValue } from 'react-native-reanimated';
+import { urlBuilder } from '@/core/utils';
 
 export default function ReferencesMenu({
   show,

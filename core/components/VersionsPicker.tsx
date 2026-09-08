@@ -1,20 +1,22 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  ScrollView,
-  Pressable,
-} from 'react-native';
 import { useState } from 'react';
+
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 
-import { useUpdateConfig, useCurrentVersion, useVersions } from '@/core/stores/configs';
-import { urlBuilder } from '@/core/utils';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
+import { useCurrentVersion, useUpdateConfig, useVersions } from '@/core/stores/configs';
+import { urlBuilder } from '@/core/utils';
 
 export default function VersionsPicker({ chapterId }: { chapterId: number }) {
   const router = useRouter();
@@ -123,7 +125,7 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
     },
     modalOverlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: STYLES.COLORS[theme].TEXT.SECONDARY + '80',
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -156,8 +158,6 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
     },
     versionItem: {
       padding: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.BACKGROUND.SECONDARY,
     },
     versionItemSelected: {
       backgroundColor: colors.BACKGROUND.SECONDARY,

@@ -1,14 +1,16 @@
-import Animated, { SharedValue } from 'react-native-reanimated';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { STYLES } from '@/core/constants';
 import { useRouter } from 'expo-router';
-import { useColorSchemeDefault } from '@/core/hooks/useColorScheme';
-import { useAnimatedMenu } from '@/core/hooks/useAnimatedMenu';
-import React from 'react';
-import VersionsPicker from './VersionsPicker';
+
 import Ionicons from '@react-native-vector-icons/ionicons/static';
+import Animated, { SharedValue } from 'react-native-reanimated';
+
+import { STYLES } from '@/core/constants';
+import { useAnimatedMenu } from '@/core/hooks/useAnimatedMenu';
+import { useColorSchemeDefault } from '@/core/hooks/useColorScheme';
 import { urlBuilder } from '@/core/utils';
+
+import VersionsPicker from './VersionsPicker';
 
 export default function TopMenu({
   show,

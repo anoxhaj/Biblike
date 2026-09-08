@@ -1,21 +1,24 @@
-import Animated from 'react-native-reanimated';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+import * as Clipboard from 'expo-clipboard';
 import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
-import * as Clipboard from 'expo-clipboard';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { useState, useEffect, useCallback, useRef } from 'react';
 
-import Verse from '@/core/components/Verse';
+import Animated from 'react-native-reanimated';
+
 import Loader from '@/core/components/Loader';
-import Screen from '@/core/components/Screen';
-import { urlBuilder } from '@/core/utils';
-import { STYLES } from '@/core/constants';
 import ReferencesMenu from '@/core/components/ReferencesMenu';
-import { useColorSchemeDefault } from '@/core/hooks';
-import { useUpdateConfig, useVersions } from '@/core/stores/configs';
-import * as vcwv from '@/core/repositories/VChapterWithVerses';
-import { useHideOnScroll } from '@/core/hooks/useHideOnScroll';
+import Screen from '@/core/components/Screen';
 import TopMenu from '@/core/components/TopMenu';
+import Verse from '@/core/components/Verse';
+import { STYLES } from '@/core/constants';
+import { useColorSchemeDefault } from '@/core/hooks';
+import { useHideOnScroll } from '@/core/hooks/useHideOnScroll';
+import * as vcwv from '@/core/repositories/VChapterWithVerses';
+import { useUpdateConfig, useVersions } from '@/core/stores/configs';
+import { formatVersesForCopy, urlBuilder } from '@/core/utils';
 
 export default function Reader({
   versionId,
@@ -129,9 +132,12 @@ export default function Reader({
   const exitCopyMode = () => {
     setShowReferencesMenu(true);
 
+    if (showMenu.value == 1) setSelectedVerseIds([]);
+
     const t = setTimeout(() => {
       setCopyMode(false);
-      setSelectedVerseIds([]);
+
+      if (showMenu.value == 0) setSelectedVerseIds([]);
     }, 300);
 
     return () => clearTimeout(t);
@@ -146,11 +152,14 @@ export default function Reader({
 
     const versionText = versions.find((v) => v.id === versionId)?.abbreviation;
 
-    const versesText = verses.map((v) => `${v.number}. ${v.text}`).join('\n');
-
-    const finalText = `${chapter.bookName} ${chapter.chapterNumber} (${versionText}) \n\n${versesText}`;
-
-    await Clipboard.setStringAsync(finalText);
+    await Clipboard.setStringAsync(
+      formatVersesForCopy({
+        bookName: chapter.bookName,
+        chapterNumber: chapter.chapterNumber,
+        versionAbbreviation: versionText,
+        verses,
+      }),
+    );
 
     exitCopyMode();
   };

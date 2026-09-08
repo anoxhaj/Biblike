@@ -1,12 +1,13 @@
-import {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withDelay,
-  useAnimatedReaction,
-  SharedValue,
-} from 'react-native-reanimated';
 import { useRef } from 'react';
+
+import {
+  SharedValue,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
+} from 'react-native-reanimated';
 
 export function useAnimatedMenu(show: SharedValue<number>, offset: number) {
   const firstRender = useRef(true);
