@@ -18,7 +18,7 @@ import { useColorSchemeDefault } from '@/core/hooks';
 import { useHideOnScroll } from '@/core/hooks/useHideOnScroll';
 import * as vcwv from '@/core/repositories/VChapterWithVerses';
 import { useUpdateConfig, useVersions } from '@/core/stores/configs';
-import { urlBuilder } from '@/core/utils';
+import { formatVersesForCopy, urlBuilder } from '@/core/utils';
 
 export default function Reader({
   versionId,
@@ -152,11 +152,14 @@ export default function Reader({
 
     const versionText = versions.find((v) => v.id === versionId)?.abbreviation;
 
-    const versesText = verses.map((v) => `${v.number}. ${v.text}`).join('\n');
-
-    const finalText = `${chapter.bookName} ${chapter.chapterNumber} (${versionText}) \n\n${versesText}`;
-
-    await Clipboard.setStringAsync(finalText);
+    await Clipboard.setStringAsync(
+      formatVersesForCopy({
+        bookName: chapter.bookName,
+        chapterNumber: chapter.chapterNumber,
+        versionAbbreviation: versionText,
+        verses,
+      }),
+    );
 
     exitCopyMode();
   };

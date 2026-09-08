@@ -1,12 +1,15 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import * as Clipboard from 'expo-clipboard';
 import { useRouter } from 'expo-router';
+
+import Ionicons from '@react-native-vector-icons/ionicons/static';
 
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
 import * as vsr from '@/core/repositories/VSearchResults';
-import { useCurrentVersion } from '@/core/stores/configs';
-import { urlBuilder } from '@/core/utils';
+import { useCurrentVersion, useVersions } from '@/core/stores/configs';
+import { formatVersesForCopy, urlBuilder } from '@/core/utils';
 
 export default function SearchResults({
   results,
@@ -20,10 +23,23 @@ export default function SearchResults({
 
   const router = useRouter();
   const currentVersion = useCurrentVersion();
+  const versions = useVersions();
+  const versionAbbreviation = versions.find((v) => v.id === currentVersion)?.abbreviation;
 
   const handleVersePress = (chapterId: number, verseId: number) => {
     const url = urlBuilder.chapter(currentVersion, chapterId, verseId);
     router.push(url);
+  };
+
+  const handleCopy = async (item: vsr.VSearchResult) => {
+    await Clipboard.setStringAsync(
+      formatVersesForCopy({
+        bookName: item.bookName,
+        chapterNumber: item.chapterNumber,
+        versionAbbreviation,
+        verses: [{ number: item.verseNumber, text: item.text }],
+      }),
+    );
   };
 
   const renderItem = ({ item }: { item: vsr.VSearchResult }) => (
@@ -31,9 +47,20 @@ export default function SearchResults({
       style={styles.itemContainer}
       onPress={() => handleVersePress(item.chapterId, item.verseId)}
     >
-      <Text style={styles.itemTitle}>
-        {item.bookName} {item.chapterNumber}:{item.verseNumber}
-      </Text>
+      <View style={styles.itemHeader}>
+        <Text style={styles.itemTitle}>
+          {item.bookName} {item.chapterNumber}:{item.verseNumber}
+        </Text>
+        <Pressable
+          style={styles.copyButton}
+          onPress={() => handleCopy(item)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Copy verse"
+        >
+          <Ionicons name="copy-outline" size={18} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
+        </Pressable>
+      </View>
 
       <View style={styles.verseContainer}>
         <HighlightText
@@ -146,12 +173,22 @@ function BuildStyleSheet(theme: 'dark' | 'light') {
       borderLeftWidth: 3,
       paddingLeft: 20,
     },
+    itemHeader: {
+      marginBottom: 21,
+      paddingRight: 28,
+    },
     itemTitle: {
       textAlign: 'center',
       fontFamily: STYLES.FONT.BOLD,
       fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
-      marginBottom: 21,
+    },
+    copyButton: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+      justifyContent: 'center',
     },
     verseContainer: {
       paddingRight: 10,

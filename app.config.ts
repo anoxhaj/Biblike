@@ -49,6 +49,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         imageWidth: 200,
       },
     ],
+    'expo-status-bar',
     '@react-native-vector-icons/entypo',
     '@react-native-vector-icons/ionicons',
   ],

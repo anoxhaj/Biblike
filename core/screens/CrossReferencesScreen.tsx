@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import * as Clipboard from 'expo-clipboard';
 import { useSQLiteContext } from 'expo-sqlite';
+
+import Ionicons from '@react-native-vector-icons/ionicons/static';
 
 import Loader from '@/core/components/Loader';
 import Screen from '@/core/components/Screen';
@@ -10,12 +13,18 @@ import Verse from '@/core/components/Verse';
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
 import * as vcr from '@/core/repositories/VCrossReferences';
-import { useCurrentVersion } from '@/core/stores/configs';
+import { useCurrentVersion, useVersions } from '@/core/stores/configs';
+import { formatVersesForCopy } from '@/core/utils';
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();
   const [crosses, setCrosses] = useState<vcr.VCrossReferences[] | null>(null);
   const currentVersion = useCurrentVersion();
+  const versions = useVersions();
+  const versionAbbreviation = versions.find((v) => v.id === currentVersion)?.abbreviation;
+
+  const theme = useColorSchemeDefault();
+  const styles = BuildStyleSheet(theme);
 
   const fetchCrosses = useCallback(() => {
     async function fetch() {
@@ -30,14 +39,44 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
     fetchCrosses();
   }, [fetchCrosses]);
 
+  const handleCopy = async (item: vcr.VCrossReferences) => {
+    await Clipboard.setStringAsync(
+      formatVersesForCopy({
+        bookName: item.bookName,
+        chapterNumber: item.chapterNumber,
+        versionAbbreviation,
+        verses: item.verses.map((verse) => ({
+          number: verse.verseNumber,
+          text: verse.verseText,
+        })),
+      }),
+    );
+  };
+
   const renderItem = ({ item }: { item: vcr.VCrossReferences }) => (
     <View key={item.id} style={styles.referenceContainer}>
-      <View>
-        <Text style={styles.referenceTitle}>{`${item.bookName} ${item.chapterNumber}:${
-          item.verseNumberFrom === item.verseNumberTo
-            ? item.verseNumberFrom
-            : `${item.verseNumberFrom}-${item.verseNumberTo}`
-        } (v: ${item.votes})`}</Text>
+      <View style={styles.referenceHeader}>
+        <Text style={styles.referenceTitle}>
+          {`${item.bookName} ${item.chapterNumber}:${
+            item.verseNumberFrom === item.verseNumberTo
+              ? item.verseNumberFrom
+              : `${item.verseNumberFrom}-${item.verseNumberTo}`
+          }`}{' '}
+          <Text
+            numberOfLines={1}
+            style={{
+              flexShrink: 0,
+            }}
+          >{`(v: ${item.votes})`}</Text>
+        </Text>
+        <Pressable
+          onPress={() => handleCopy(item)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Copy verses"
+        >
+          <Ionicons name="copy-outline" size={18} color={STYLES.COLORS[theme].TEXT.PRIMARY} />
+        </Pressable>
       </View>
       {item.verses.map((verse: vcr.Verse, index: number) => (
         <Verse
@@ -51,9 +90,6 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
       ))}
     </View>
   );
-
-  const theme = useColorSchemeDefault();
-  const styles = BuildStyleSheet(theme);
 
   return (
     <Screen removeTopEdge={true}>
@@ -91,17 +127,24 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
 function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
     referenceContainer: {
-      marginLeft: 30,
-      marginVertical: 30,
+      margin: 30,
       borderLeftColor: STYLES.COLORS[theme].BACKGROUND.SECONDARY,
       borderLeftWidth: 3,
       borderStyle: 'solid',
+    },
+    referenceHeader: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'row',
+      paddingHorizontal: 30,
+      gap: 30,
     },
     referenceTitle: {
       textAlign: 'center',
       fontFamily: STYLES.FONT.BOLD,
       fontSize: 21,
       color: STYLES.COLORS[theme].TEXT.PRIMARY,
+      width: '90%',
     },
     loaderView: {
       backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
