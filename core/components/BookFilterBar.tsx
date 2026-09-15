@@ -13,26 +13,23 @@ export interface BookSection {
 
 export default function BookFilterBar({
   books,
-  selectedBookIds,
+  selectedBookId,
   onToggle,
   onClearAll,
   visible,
-  loadingBookId,
   theme,
 }: {
   books: BookSection[];
-  selectedBookIds: Set<number>;
+  selectedBookId: number;
   onToggle: (bookId: number) => void;
   onClearAll: () => void;
   visible: boolean;
-  loadingBookId: number | null;
   theme: 'dark' | 'light';
 }) {
   const styles = buildStyleSheet(theme);
 
   if (!visible) return null;
 
-  const allSelected = selectedBookIds.size === 0;
   const totalCount = books.reduce((sum, b) => sum + b.count, 0);
 
   return (
@@ -46,8 +43,7 @@ export default function BookFilterBar({
         <BookChip
           label="All"
           count={totalCount}
-          selected={allSelected}
-          loading={loadingBookId === -1}
+          selected={selectedBookId === 0}
           onPress={onClearAll}
           theme={theme}
         />
@@ -59,8 +55,7 @@ export default function BookFilterBar({
             key={book.bookId}
             label={book.bookName}
             count={book.count}
-            selected={selectedBookIds.has(book.bookId)}
-            loading={loadingBookId === book.bookId}
+            selected={selectedBookId === book.bookId}
             onPress={() => onToggle(book.bookId)}
             theme={theme}
           />
