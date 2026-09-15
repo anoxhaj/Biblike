@@ -1,9 +1,11 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { memo, useCallback, useEffect, useRef } from 'react';
+
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import * as Clipboard from 'expo-clipboard';
 import { useRouter } from 'expo-router';
 
-import Ionicons from '@react-native-vector-icons/ionicons/static';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
 
 import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
@@ -14,70 +16,122 @@ import { formatVersesForCopy, urlBuilder } from '@/core/utils';
 import CopyButton from './CopyButton';
 import Verse from './Verse';
 
+const SearchResultItem = memo(
+  ({
+    item,
+    searchQuery,
+    theme,
+    onPress,
+    onCopy,
+  }: {
+    item: vsr.VSearchResult;
+    searchQuery: string;
+    theme: 'dark' | 'light';
+    onPress: (chapterId: number, verseId: number) => void;
+    onCopy: (item: vsr.VSearchResult) => void;
+  }) => {
+    const styles = BuildStyleSheet(theme);
+
+    return (
+      <Pressable style={styles.itemContainer} onPress={() => onPress(item.chapterId, item.verseId)}>
+        <View style={styles.itemHeader}>
+          <Text style={styles.itemTitle}>
+            {item.bookName} {item.chapterNumber}:{item.verseNumber}
+          </Text>
+
+          <CopyButton onCopy={() => onCopy(item)} accessibilityLabel="Copy verse" />
+        </View>
+
+        <Verse
+          id={item.verseId}
+          number={item.verseNumber}
+          text={item.text}
+          selected={false}
+          onPress={() => onPress(item.chapterId, item.verseId)}
+          highlight={searchQuery}
+          highlightStyle={styles.highlight}
+        />
+      </Pressable>
+    );
+  },
+);
+
 export default function SearchResults({
   results,
   searchQuery,
+  scrollToTop = 0,
+  onScrollComplete,
+  filterKey,
 }: {
   results: vsr.VSearchResult[];
   searchQuery: string;
+  scrollToTop?: number;
+  onScrollComplete?: () => void;
+  filterKey?: string | number | null;
 }) {
   const theme = useColorSchemeDefault();
   const styles = BuildStyleSheet(theme);
+
+  const flatListRef = useRef<FlashListRef<vsr.VSearchResult>>(null);
 
   const router = useRouter();
   const currentVersion = useCurrentVersion();
   const versions = useVersions();
   const versionAbbreviation = versions.find((v) => v.id === currentVersion)?.abbreviation;
 
-  const handleVersePress = (chapterId: number, verseId: number) => {
-    const url = urlBuilder.chapter(currentVersion, chapterId, verseId);
-    router.push(url);
-  };
+  useEffect(() => {
+    if (scrollToTop > 0 && flatListRef.current && results.length > 0) {
+      flatListRef.current.scrollToOffset({ offset: 0, animated: false });
+      onScrollComplete?.();
+    }
+  }, [scrollToTop, results.length, onScrollComplete]);
 
-  const handleCopy = async (item: vsr.VSearchResult) => {
-    await Clipboard.setStringAsync(
-      formatVersesForCopy({
-        bookName: item.bookName,
-        chapterNumber: item.chapterNumber,
-        versionAbbreviation,
-        verses: [{ number: item.verseNumber, text: item.text }],
-      }),
-    );
-  };
-
-  const renderItem = ({ item }: { item: vsr.VSearchResult }) => (
-    <Pressable
-      style={styles.itemContainer}
-      onPress={() => handleVersePress(item.chapterId, item.verseId)}
-    >
-      <View style={styles.itemHeader}>
-        <Text style={styles.itemTitle}>
-          {item.bookName} {item.chapterNumber}:{item.verseNumber}
-        </Text>
-
-        <CopyButton onCopy={() => handleCopy(item)} accessibilityLabel="Copy verse" />
-      </View>
-
-      <Verse
-        id={item.verseId}
-        number={item.verseNumber}
-        text={item.text}
-        selected={false}
-        onPress={() => {}}
-        highlight={searchQuery}
-        highlightStyle={styles.highlight}
-      />
-    </Pressable>
+  const handleVersePress = useCallback(
+    (chapterId: number, verseId: number) => {
+      const url = urlBuilder.chapter(currentVersion, chapterId, verseId);
+      router.push(url);
+    },
+    [currentVersion, router],
   );
 
+  const handleCopy = useCallback(
+    async (item: vsr.VSearchResult) => {
+      await Clipboard.setStringAsync(
+        formatVersesForCopy({
+          bookName: item.bookName,
+          chapterNumber: item.chapterNumber,
+          versionAbbreviation,
+          verses: [{ number: item.verseNumber, text: item.text }],
+        }),
+      );
+    },
+    [versionAbbreviation],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: vsr.VSearchResult }) => (
+      <SearchResultItem
+        item={item}
+        searchQuery={searchQuery}
+        theme={theme}
+        onPress={handleVersePress}
+        onCopy={handleCopy}
+      />
+    ),
+    [searchQuery, theme, handleVersePress, handleCopy],
+  );
+
+  const keyExtractor = useCallback((item: vsr.VSearchResult) => item.id.toString(), []);
+
   return results.length > 0 ? (
-    <FlatList
-      style={styles.container}
+    <FlashList
+      key={filterKey ?? 'all'}
+      ref={flatListRef}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
       data={results}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={keyExtractor}
     />
   ) : (
     <View style={styles.emptyContainer}>
@@ -88,14 +142,10 @@ export default function SearchResults({
 
 function BuildStyleSheet(theme: 'dark' | 'light') {
   return StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
-    },
-
     contentContainer: {
       paddingTop: 10,
       paddingBottom: 40,
+      backgroundColor: STYLES.COLORS[theme].BACKGROUND.PRIMARY,
     },
 
     itemContainer: {

@@ -138,7 +138,7 @@ export default function Reader({
       setCopyMode(false);
 
       if (showMenu.value == 0) setSelectedVerseIds([]);
-    }, 300);
+    }, 100);
 
     return () => clearTimeout(t);
   };

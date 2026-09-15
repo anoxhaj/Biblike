@@ -5,6 +5,7 @@ export interface VCrossReferences {
   from: number;
   to: number;
   bookName: string;
+  chapterId: number;
   chapterNumber: number;
   verseNumberFrom: number;
   verseNumberTo: number;
@@ -26,6 +27,7 @@ interface Helper {
   from: number;
   to: number;
   book_name: string;
+  chapter_id: number;
   chapter_number: number;
   verse_id: number;
   verse_number: number;
@@ -45,6 +47,7 @@ export async function GetByVerseIdAsync(
     verse_cross_references.cross_verse_from AS [from],
     verse_cross_references.cross_verse_to AS [to],
     book_translations.name AS book_name,
+    chapters.id AS chapter_id,
     chapters.number AS chapter_number,
     verses.id AS verse_id,
     verses.number AS verse_number,
@@ -72,6 +75,7 @@ WHERE
         from: item.from,
         to: item.to,
         bookName: item.book_name,
+        chapterId: item.chapter_id,
         chapterNumber: item.chapter_number,
         verseNumberFrom: item.verse_number,
         verseNumberTo: item.verse_number,

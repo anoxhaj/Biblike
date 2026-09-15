@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import * as Clipboard from 'expo-clipboard';
+import { useRouter } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 
 import Ionicons from '@react-native-vector-icons/ionicons/static';
@@ -14,12 +15,13 @@ import { STYLES } from '@/core/constants';
 import { useColorSchemeDefault } from '@/core/hooks';
 import * as vcr from '@/core/repositories/VCrossReferences';
 import { useCurrentVersion, useVersions } from '@/core/stores/configs';
-import { formatVersesForCopy } from '@/core/utils';
+import { formatVersesForCopy, urlBuilder } from '@/core/utils';
 
 import CopyButton from '../components/CopyButton';
 
 export default function CrossReferencesList({ verseId }: { verseId: number }) {
   const db = useSQLiteContext();
+  const router = useRouter();
   const [crosses, setCrosses] = useState<vcr.VCrossReferences[] | null>(null);
   const currentVersion = useCurrentVersion();
   const versions = useVersions();
@@ -55,8 +57,20 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
     );
   };
 
+  const handleVersePress = useCallback(
+    (chapterId: number, verseId: number) => {
+      const url = urlBuilder.chapter(currentVersion, chapterId, verseId);
+      router.push(url);
+    },
+    [currentVersion, router],
+  );
+
   const renderItem = ({ item }: { item: vcr.VCrossReferences }) => (
-    <View key={item.id} style={styles.referenceContainer}>
+    <Pressable
+      key={item.id}
+      style={styles.referenceContainer}
+      onPress={() => handleVersePress(item.chapterId, item.verses[0].verseId)}
+    >
       <View style={styles.referenceHeader}>
         <Text style={styles.referenceTitle}>
           {`${item.bookName} ${item.chapterNumber}:${
@@ -75,10 +89,10 @@ export default function CrossReferencesList({ verseId }: { verseId: number }) {
           number={verse.verseNumber}
           text={verse.verseText}
           selected={false}
-          onPress={() => {}}
+          onPress={() => handleVersePress(item.chapterId, verse.verseId)}
         />
       ))}
-    </View>
+    </Pressable>
   );
 
   return (
