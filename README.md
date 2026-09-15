@@ -1,4 +1,4 @@
-# Biblike(1.5.0)
+# Biblike(1.5.1)
 
 A minimalistic offline Bible reading mobile application, built with:
 
